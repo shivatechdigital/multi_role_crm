@@ -18,6 +18,7 @@ export async function DELETE(
     }
 
     const { id } = await params
+    const mode = new URL(request.url).searchParams.get('mode')
 
     const invite = await prisma.teamInvite.findUnique({
       where: { id },
@@ -26,6 +27,14 @@ export async function DELETE(
 
     if (!invite) {
       return NextResponse.json({ error: 'Invite not found' }, { status: 404 })
+    }
+
+    if (mode === 'delete') {
+      await prisma.teamInvite.delete({
+        where: { id },
+      })
+
+      return NextResponse.json({ success: true, deleted: true })
     }
 
     if (invite.status !== 'pending') {

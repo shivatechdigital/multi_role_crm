@@ -259,6 +259,27 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
     }
   }
 
+  const handleDeleteInvite = async (inviteId: string) => {
+    try {
+      const response = await fetch(`/api/invites/${inviteId}?mode=delete`, {
+        method: 'DELETE',
+      })
+
+      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to delete invite')
+      }
+
+      setInvites((currentInvites) =>
+        currentInvites.filter((invite) => invite.id !== inviteId)
+      )
+
+      toast.success('Invite deleted')
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to delete invite')
+    }
+  }
+
   const handleCopyInviteLink = async (token: string) => {
     try {
       if (typeof window === 'undefined' || !navigator.clipboard) {
@@ -481,6 +502,15 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
                             onClick={() => handleRevokeInvite(invite.id)}
                           >
                             Revoke
+                          </Button>
+                        )}
+                        {!isPending && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDeleteInvite(invite.id)}
+                          >
+                            Delete
                           </Button>
                         )}
                       </div>
