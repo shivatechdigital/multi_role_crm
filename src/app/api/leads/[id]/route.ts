@@ -1,6 +1,36 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth/auth'
 import { prisma } from '@/lib/db/prisma'
+import { canManageLeads, getUserRole } from '@/lib/auth/permissions'
+
+async function getAuthorizedLead(id: string, userId: string, role: string) {
+  const lead = await prisma.lead.findUnique({
+    where: { id },
+    include: {
+      user: {
+        select: { id: true, name: true, email: true, image: true },
+      },
+      activities: {
+        orderBy: { createdAt: 'desc' },
+        include: {
+          user: {
+            select: { id: true, name: true, image: true },
+          },
+        },
+      },
+    },
+  })
+
+  if (!lead) {
+    return { error: NextResponse.json({ error: 'Lead not found' }, { status: 404 }) }
+  }
+
+  if (!canManageLeads(role) && lead.assignedTo !== userId) {
+    return { error: NextResponse.json({ error: 'Forbidden' }, { status: 403 }) }
+  }
+
+  return { lead }
+}
 
 // GET - Get single lead with activities
 export async function GET(
@@ -13,28 +43,12 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const role = getUserRole(session.user.role)
+
     const { id } = await params
 
-    const lead = await prisma.lead.findUnique({
-      where: { id },
-      include: {
-        user: {
-          select: { id: true, name: true, email: true, image: true },
-        },
-        activities: {
-          orderBy: { createdAt: 'desc' },
-          include: {
-            user: {
-              select: { id: true, name: true, image: true },
-            },
-          },
-        },
-      },
-    })
-
-    if (!lead) {
-      return NextResponse.json({ error: 'Lead not found' }, { status: 404 })
-    }
+    const { lead, error } = await getAuthorizedLead(id, session.user.id, role)
+    if (error) return error
 
     return NextResponse.json({ success: true, lead })
   } catch (error: any) {
@@ -56,23 +70,44 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const role = getUserRole(session.user.role)
+
     const { id } = await params
     const body = await request.json()
 
+    const { error } = await getAuthorizedLead(id, session.user.id, role)
+    if (error) return error
+
+    const isManager = canManageLeads(role)
+
+    // Users can update only status and cannot reassign or overwrite ownership-related fields.
+    const updateData = isManager
+      ? body
+      : {
+          status: body.status,
+        }
+
+    if (!isManager && !updateData.status) {
+      return NextResponse.json(
+        { error: 'You can only update lead status' },
+        { status: 403 }
+      )
+    }
+
     const lead = await prisma.lead.update({
       where: { id },
-      data: body,
+      data: updateData,
     })
 
     // Log activity if status changed
-    if (body.status) {
+    if (updateData.status) {
       await prisma.leadActivity.create({
         data: {
           leadId: id,
           userId: session.user.id,
           type: 'status_change',
-          description: `Status changed to ${body.status}`,
-          metadata: { newStatus: body.status },
+          description: `Status changed to ${updateData.status}`,
+          metadata: { newStatus: updateData.status },
         },
       })
     }
@@ -97,7 +132,17 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const role = getUserRole(session.user.role)
+    if (!canManageLeads(role)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
     const { id } = await params
+
+    const exists = await prisma.lead.findUnique({ where: { id }, select: { id: true } })
+    if (!exists) {
+      return NextResponse.json({ error: 'Lead not found' }, { status: 404 })
+    }
 
     await prisma.lead.delete({ where: { id } })
 

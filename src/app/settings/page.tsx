@@ -2,6 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import { useTheme } from 'next-themes'
+import { Brain, Users } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -34,10 +35,14 @@ import {
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { signOut } from 'next-auth/react'
+import { TeamManagement } from '@/components/settings/team-management'
+import { canManageTeam, getUserRole } from '@/lib/auth/permissions'
 
 export default function SettingsPage() {
   const { data: session } = useSession()
   const { theme, setTheme } = useTheme()
+  const currentRole = getUserRole(session?.user?.role)
+  const canViewTeam = canManageTeam(currentRole)
 
   const webhookUrl = typeof window !== 'undefined' 
     ? `${window.location.origin}/api/webhooks/lead`
@@ -66,11 +71,17 @@ export default function SettingsPage() {
       </div>
 
       <Tabs defaultValue="profile" className="space-y-6">
-        <TabsList className="grid h-auto w-full grid-cols-2 gap-1 sm:grid-cols-3 lg:w-[600px] lg:grid-cols-5">
+        <TabsList className={`grid h-auto w-full grid-cols-2 gap-1 sm:grid-cols-3 ${canViewTeam ? 'lg:w-[720px] lg:grid-cols-6' : 'lg:w-[600px] lg:grid-cols-5'}`}>
           <TabsTrigger value="profile" className="text-xs sm:text-sm">
             <User className="w-4 h-4 mr-2" />
             Profile
           </TabsTrigger>
+          {canViewTeam && (
+            <TabsTrigger value="team" className="text-xs sm:text-sm">
+              <Users className="w-4 h-4 mr-2" />
+              Team
+            </TabsTrigger>
+          )}
           <TabsTrigger value="appearance" className="text-xs sm:text-sm">
             <Palette className="w-4 h-4 mr-2" />
             Theme
@@ -129,6 +140,12 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
         </TabsContent>
+
+        {canViewTeam && (
+          <TabsContent value="team" className="space-y-6">
+            <TeamManagement currentRole={currentRole} currentUserId={session?.user?.id || ''} />
+          </TabsContent>
+        )}
 
         {/* Appearance Tab */}
         <TabsContent value="appearance" className="space-y-6">
@@ -422,6 +439,3 @@ function NotificationSetting({
     </div>
   )
 }
-
-// Import Brain icon
-import { Brain } from 'lucide-react'

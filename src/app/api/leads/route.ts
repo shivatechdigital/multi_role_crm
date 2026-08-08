@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth/auth'
 import { prisma } from '@/lib/db/prisma'
+import { canManageLeads, getUserRole } from '@/lib/auth/permissions'
 
 // GET - List all leads
 export async function GET(request: Request) {
@@ -9,6 +10,9 @@ export async function GET(request: Request) {
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
+
+    const role = getUserRole(session.user.role)
+    const canViewAllLeads = canManageLeads(role)
 
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status')
@@ -27,6 +31,10 @@ export async function GET(request: Request) {
       ]
     }
 
+    if (!canViewAllLeads) {
+      where.assignedTo = session.user.id
+    }
+
     const leads = await prisma.lead.findMany({
       where,
       orderBy: { createdAt: 'desc' },
@@ -41,15 +49,16 @@ export async function GET(request: Request) {
     })
 
     // Calculate stats
-    const totalLeads = await prisma.lead.count()
-    const newLeads = await prisma.lead.count({ where: { status: 'NEW' } })
-    const qualifiedLeads = await prisma.lead.count({ where: { status: 'QUALIFIED' } })
-    const wonLeads = await prisma.lead.count({ where: { status: 'WON' } })
+    const scopeWhere = canViewAllLeads ? {} : { assignedTo: session.user.id }
+    const totalLeads = await prisma.lead.count({ where: scopeWhere })
+    const newLeads = await prisma.lead.count({ where: { ...scopeWhere, status: 'NEW' } })
+    const qualifiedLeads = await prisma.lead.count({ where: { ...scopeWhere, status: 'QUALIFIED' } })
+    const wonLeads = await prisma.lead.count({ where: { ...scopeWhere, status: 'WON' } })
     
     const last7Days = new Date()
     last7Days.setDate(last7Days.getDate() - 7)
     const recentLeads = await prisma.lead.count({
-      where: { createdAt: { gte: last7Days } },
+      where: { ...scopeWhere, createdAt: { gte: last7Days } },
     })
 
     return NextResponse.json({

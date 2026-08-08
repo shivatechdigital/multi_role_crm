@@ -3,6 +3,8 @@
 import type { ElementType } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import { canAccessAutomation, getUserRole } from '@/lib/auth/permissions'
 import { cn } from '@/lib/utils'
 import {
   LayoutDashboard,
@@ -101,6 +103,19 @@ const menuSections: MenuSection[] = [
 
 export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname()
+  const { data: session } = useSession()
+  const currentRole = getUserRole(session?.user?.role)
+  const visibleMenuSections = menuSections
+    .map((section) => ({
+      ...section,
+      items: section.items.filter((item) => {
+        if (item.href === '/settings/automation') {
+          return canAccessAutomation(currentRole)
+        }
+        return true
+      }),
+    }))
+    .filter((section) => section.items.length > 0)
 
   return (
     <aside
@@ -123,7 +138,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
 
         {/* Navigation */}
         <nav className="flex-1 space-y-6 overflow-y-auto p-4">
-          {menuSections.map((section) => (
+          {visibleMenuSections.map((section) => (
             <div key={section.title}>
               <h3 className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                 {section.title}

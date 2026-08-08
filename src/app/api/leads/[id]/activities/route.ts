@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth/auth'
 import { prisma } from '@/lib/db/prisma'
+import { canManageLeads, getUserRole } from '@/lib/auth/permissions'
 
 // POST - Add activity to lead
 export async function POST(
@@ -13,6 +14,8 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const role = getUserRole(session.user.role)
+
     const { id } = await params
     const body = await request.json()
     const { type, description, metadata } = body
@@ -22,6 +25,19 @@ export async function POST(
         { error: 'Type and description required' },
         { status: 400 }
       )
+    }
+
+    const lead = await prisma.lead.findUnique({
+      where: { id },
+      select: { id: true, assignedTo: true },
+    })
+
+    if (!lead) {
+      return NextResponse.json({ error: 'Lead not found' }, { status: 404 })
+    }
+
+    if (!canManageLeads(role) && lead.assignedTo !== session.user.id) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
     const activity = await prisma.leadActivity.create({

@@ -1,4 +1,5 @@
 import { auth } from '@/lib/auth/auth'
+import { type AppRole, hasMinimumRole } from '@/lib/auth/permissions'
 import { redirect } from 'next/navigation'
 
 export async function getCurrentUser() {
@@ -14,10 +15,14 @@ export async function requireAuth() {
   return user
 }
 
-export async function requireAdmin() {
+export async function requireRole(role: AppRole) {
   const user = await requireAuth()
-  if (user.role !== 'ADMIN') {
+  if (!hasMinimumRole(user.role, role)) {
     redirect('/dashboard')
   }
   return user
+}
+
+export async function requireAdmin() {
+  return requireRole('ADMIN')
 }
