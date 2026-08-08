@@ -147,11 +147,7 @@ export default function NewLeadPage() {
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select service" />
                   </SelectTrigger>
-                  <SelectContent
-                    position="popper"
-                    sideOffset={4}
-                    className="z-[100] w-[var(--radix-select-trigger-width)]"
-                  >
+                  <SelectContent className="z-[100]">
                     <SelectItem value="seo">SEO</SelectItem>
                     <SelectItem value="web_development">Web Development</SelectItem>
                     <SelectItem value="digital_marketing">Digital Marketing</SelectItem>
@@ -172,11 +168,7 @@ export default function NewLeadPage() {
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select budget" />
                   </SelectTrigger>
-                  <SelectContent
-                    position="popper"
-                    sideOffset={4}
-                    className="z-[100] w-[var(--radix-select-trigger-width)]"
-                  >
+                  <SelectContent className="z-[100]">
                     <SelectItem value="<25k">Less than ₹25,000</SelectItem>
                     <SelectItem value="25k-50k">₹25,000 - ₹50,000</SelectItem>
                     <SelectItem value="50k-1L">₹50,000 - ₹1 Lakh</SelectItem>
@@ -197,11 +189,7 @@ export default function NewLeadPage() {
                 <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent
-                  position="popper"
-                  sideOffset={4}
-                  className="z-[100] w-[var(--radix-select-trigger-width)]"
-                >
+                <SelectContent className="z-[100]">
                   <SelectItem value="manual">Manual Entry</SelectItem>
                   <SelectItem value="website">Website</SelectItem>
                   <SelectItem value="referral">Referral</SelectItem>

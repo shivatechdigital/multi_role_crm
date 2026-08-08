@@ -189,11 +189,7 @@ export default function LeadDetailPage({
               <SelectTrigger className="w-[180px]">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent
-                position="popper"
-                sideOffset={4}
-                className="z-[100] w-[var(--radix-select-trigger-width)]"
-              >
+              <SelectContent className="z-[100]">
                 {LEAD_STATUSES.map((status) => (
                   <SelectItem key={status} value={status}>
                     {status.replace('_', ' ')}
@@ -245,11 +241,7 @@ export default function LeadDetailPage({
                 <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent
-                  position="popper"
-                  sideOffset={4}
-                  className="z-[100] w-[var(--radix-select-trigger-width)]"
-                >
+                <SelectContent className="z-[100]">
                   <SelectItem value="note">📝 Note</SelectItem>
                   <SelectItem value="call">📞 Call</SelectItem>
                   <SelectItem value="email">✉️ Email</SelectItem>
