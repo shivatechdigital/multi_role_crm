@@ -152,16 +152,10 @@ export async function POST(request: Request) {
     if (email && isLeadDetailsEmailConfigured()) {
       try {
         const appName = process.env.APP_NAME?.trim() || 'Multi-Role CRM'
-        const appUrl =
-          process.env.APP_URL?.trim() ||
-          process.env.NEXTAUTH_URL?.trim() ||
-          process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
-          ''
 
         await sendLeadDetailsEmail({
           to: email,
           appName,
-          leadUrl: appUrl ? `${appUrl}/leads/${lead.id}` : undefined,
           lead: {
             id: lead.id,
             name: lead.name,

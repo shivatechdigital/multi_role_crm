@@ -3,7 +3,6 @@ import nodemailer from 'nodemailer'
 type LeadDetailsEmailPayload = {
   to: string
   appName: string
-  leadUrl?: string
   lead: {
     id: string
     name: string
@@ -94,10 +93,6 @@ export async function sendLeadDetailsEmail(payload: LeadDetailsEmailPayload) {
     `Created At: ${createdAtText}`,
   ]
 
-  if (payload.leadUrl) {
-    textLines.push(`View lead: ${payload.leadUrl}`)
-  }
-
   const html = `
     <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #111827;">
       <h2 style="margin-bottom: 8px;">Lead details received</h2>
@@ -118,7 +113,6 @@ export async function sendLeadDetailsEmail(payload: LeadDetailsEmailPayload) {
           <tr><td style="padding: 6px 8px; border: 1px solid #e5e7eb;"><strong>Created At</strong></td><td style="padding: 6px 8px; border: 1px solid #e5e7eb;">${escapeHtml(createdAtText)}</td></tr>
         </tbody>
       </table>
-      ${payload.leadUrl ? `<p style="margin-top: 12px;"><a href="${payload.leadUrl}">Open this lead in CRM</a></p>` : ''}
     </div>
   `
 
