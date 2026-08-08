@@ -94,7 +94,14 @@ Required or commonly used variables found in the codebase:
 | `GSC_PROPERTY` | Search Console property, for example `sc-domain:example.com` |
 | `NEXT_PUBLIC_SITE_URL` | Public site URL used by health and sync flows |
 | `NEXT_PUBLIC_WEBSITE_URL` | Website URL used by service page previews |
+| `APP_NAME` | Product name used in invite email subject/body |
 | `SYNC_SECRET` | Bearer secret used by sync and distribution endpoints |
+| `SMTP_HOST` | SMTP host for sending team invite emails |
+| `SMTP_PORT` | SMTP port, for example `587` or `465` |
+| `SMTP_SECURE` | `true` for TLS/465, otherwise `false` |
+| `SMTP_USER` | SMTP username |
+| `SMTP_PASS` | SMTP password or app password |
+| `SMTP_FROM` | Sender identity, for example `CRM Team <no-reply@example.com>` |
 | `GOOGLE_PAGESPEED_API_KEY` | API key for PageSpeed requests |
 | `LARAVEL_API_URL` | Base URL for Laravel SEO integration |
 | `LARAVEL_API_TOKEN` | API token for Laravel integration |

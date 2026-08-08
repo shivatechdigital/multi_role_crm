@@ -3,6 +3,10 @@ import { randomUUID } from 'crypto'
 import { auth } from '@/lib/auth/auth'
 import { prisma } from '@/lib/db/prisma'
 import {
+  isInviteEmailConfigured,
+  sendTeamInviteEmail,
+} from '@/lib/notifications/team-invite-email'
+import {
   canManageInvites,
   getUserRole,
   isAppRole,
@@ -100,10 +104,34 @@ export async function POST(request: Request) {
     })
 
     const origin = new URL(request.url).origin
+    const inviteUrl = `${origin}/invite?token=${token}`
+    let emailSent = false
+    let emailError: string | null = null
+
+    if (isInviteEmailConfigured()) {
+      try {
+        await sendTeamInviteEmail({
+          to: invite.email,
+          inviteUrl,
+          role: invite.role,
+          inviterName: session.user.name,
+          inviterEmail: session.user.email,
+          expiresAt: invite.expiresAt,
+        })
+        emailSent = true
+      } catch (error: any) {
+        emailError = error?.message || 'Failed to send invite email'
+      }
+    } else {
+      emailError = 'SMTP is not configured; invite link created but email not sent'
+    }
+
     return NextResponse.json({
       success: true,
       invite,
-      inviteUrl: `${origin}/invite?token=${token}`,
+      inviteUrl,
+      emailSent,
+      emailError,
     })
   } catch (error: any) {
     return NextResponse.json(

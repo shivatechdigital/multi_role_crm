@@ -198,6 +198,12 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
       setInviteEmail('')
       toast.success('Invite created successfully')
 
+      if (data.emailSent) {
+        toast.success(`Invite email sent to ${data.invite.email}`)
+      } else if (data.emailError) {
+        toast.info(data.emailError)
+      }
+
       if (data.inviteUrl && typeof navigator !== 'undefined' && navigator.clipboard) {
         try {
           await navigator.clipboard.writeText(data.inviteUrl)
