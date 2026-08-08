@@ -17,6 +17,7 @@ model User {
   emailVerified DateTime?
   accounts      Account[]
   sessions      Session[]
+  createdInvites TeamInvite[] @relation("CreatedInvites")
   leads         Lead[]
   activities    LeadActivity[]
   createdAt     DateTime  @default(now())
@@ -334,6 +335,22 @@ model ApiLog {
   createdAt  DateTime @default(now())
   @@index([endpoint])
   @@index([createdAt])
+}
+
+model TeamInvite {
+  id            String   @id @default(cuid())
+  email         String
+  role          UserRole @default(USER)
+  token         String   @unique
+  status        String   @default("pending")
+  expiresAt     DateTime
+  acceptedAt    DateTime?
+  createdBy     String
+  createdByUser User     @relation("CreatedInvites", fields: [createdBy], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  @@index([email])
+  @@index([status])
+  @@index([expiresAt])
 }
 
 // ============================================

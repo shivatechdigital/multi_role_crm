@@ -3,7 +3,10 @@
 import { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -14,6 +17,7 @@ import {
 import { toast } from 'sonner'
 import {
   APP_ROLES,
+  canManageInvites,
   canManageRoles,
   canManageTeam,
   type AppRole,
@@ -42,6 +46,16 @@ type TeamResponse = {
   }
 }
 
+type TeamInvite = {
+  id: string
+  email: string
+  role: AppRole
+  token: string
+  status: string
+  expiresAt: string
+  createdAt: string
+}
+
 interface TeamManagementProps {
   currentRole: string
   currentUserId: string
@@ -49,11 +63,17 @@ interface TeamManagementProps {
 
 export function TeamManagement({ currentRole, currentUserId }: TeamManagementProps) {
   const [team, setTeam] = useState<TeamResponse | null>(null)
+  const [invites, setInvites] = useState<TeamInvite[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isInvitesLoading, setIsInvitesLoading] = useState(false)
   const [isUpdatingUserId, setIsUpdatingUserId] = useState<string | null>(null)
+  const [inviteEmail, setInviteEmail] = useState('')
+  const [inviteRole, setInviteRole] = useState<AppRole>('USER')
+  const [isCreatingInvite, setIsCreatingInvite] = useState(false)
 
   const canViewTeam = canManageTeam(currentRole)
   const canEditRoles = canManageRoles(currentRole)
+  const canInviteUsers = canManageInvites(currentRole)
 
   useEffect(() => {
     if (!canViewTeam) {
@@ -81,6 +101,32 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
 
     fetchTeam()
   }, [canViewTeam])
+
+  useEffect(() => {
+    if (!canInviteUsers) {
+      return
+    }
+
+    const fetchInvites = async () => {
+      try {
+        setIsInvitesLoading(true)
+        const response = await fetch('/api/invites', { cache: 'no-store' })
+        const data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to load invites')
+        }
+
+        setInvites(data.invites || [])
+      } catch (error: any) {
+        toast.error(error.message || 'Failed to load invites')
+      } finally {
+        setIsInvitesLoading(false)
+      }
+    }
+
+    fetchInvites()
+  }, [canInviteUsers])
 
   const handleRoleChange = async (userId: string, role: AppRole) => {
     try {
@@ -121,6 +167,72 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
       toast.error(error.message || 'Failed to update role')
     } finally {
       setIsUpdatingUserId(null)
+    }
+  }
+
+  const handleCreateInvite = async () => {
+    if (!inviteEmail.trim()) {
+      toast.error('Please enter an email address')
+      return
+    }
+
+    try {
+      setIsCreatingInvite(true)
+      const response = await fetch('/api/invites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: inviteEmail,
+          role: inviteRole,
+        }),
+      })
+
+      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create invite')
+      }
+
+      setInvites((currentInvites) => [data.invite, ...currentInvites])
+      setInviteEmail('')
+      toast.success('Invite created successfully')
+
+      if (data.inviteUrl && typeof navigator !== 'undefined' && navigator.clipboard) {
+        try {
+          await navigator.clipboard.writeText(data.inviteUrl)
+          toast.success('Invite link copied to clipboard')
+        } catch {
+          // Ignore clipboard failures.
+        }
+      }
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to create invite')
+    } finally {
+      setIsCreatingInvite(false)
+    }
+  }
+
+  const handleRevokeInvite = async (inviteId: string) => {
+    try {
+      const response = await fetch(`/api/invites/${inviteId}`, {
+        method: 'DELETE',
+      })
+
+      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to revoke invite')
+      }
+
+      setInvites((currentInvites) =>
+        currentInvites.map((invite) =>
+          invite.id === inviteId ? { ...invite, status: 'revoked' } : invite
+        )
+      )
+
+      toast.success('Invite revoked')
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to revoke invite')
     }
   }
 
@@ -218,6 +330,95 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
           )}
         </CardContent>
       </Card>
+
+      {canInviteUsers && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Invite Team Members</CardTitle>
+            <CardDescription>
+              Create role-based invites and manage pending invitations.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid gap-3 md:grid-cols-[1fr_180px_auto] md:items-end">
+              <div className="space-y-2">
+                <Label htmlFor="invite-email">Email</Label>
+                <Input
+                  id="invite-email"
+                  type="email"
+                  placeholder="name@company.com"
+                  value={inviteEmail}
+                  onChange={(event) => setInviteEmail(event.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Role</Label>
+                <Select
+                  value={inviteRole}
+                  onValueChange={(value) => setInviteRole(value as AppRole)}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {APP_ROLES.map((role) => (
+                      <SelectItem key={role} value={role}>
+                        {role}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Button onClick={handleCreateInvite} disabled={isCreatingInvite}>
+                {isCreatingInvite ? 'Creating...' : 'Create Invite'}
+              </Button>
+            </div>
+
+            <div className="space-y-2">
+              {isInvitesLoading ? (
+                <p className="text-sm text-muted-foreground">Loading invites...</p>
+              ) : invites.length ? (
+                invites.map((invite) => {
+                  const isPending = invite.status === 'pending'
+                  return (
+                    <div
+                      key={invite.id}
+                      className="flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between"
+                    >
+                      <div>
+                        <p className="font-medium">{invite.email}</p>
+                        <p className="text-sm text-muted-foreground">
+                          Role: {invite.role} • Expires:{' '}
+                          {new Date(invite.expiresAt).toLocaleDateString()}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <Badge variant={isPending ? 'secondary' : 'outline'}>
+                          {invite.status}
+                        </Badge>
+                        {isPending && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleRevokeInvite(invite.id)}
+                          >
+                            Revoke
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })
+              ) : (
+                <p className="text-sm text-muted-foreground">No invites sent yet.</p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

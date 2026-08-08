@@ -39,3 +39,7 @@ export function canManageLeads(role: string | null | undefined) {
 export function canManageOperations(role: string | null | undefined) {
   return hasMinimumRole(role, 'MANAGER')
 }
+
+export function canManageInvites(role: string | null | undefined) {
+  return hasMinimumRole(role, 'ADMIN')
+}
