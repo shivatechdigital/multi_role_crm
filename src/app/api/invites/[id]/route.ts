@@ -20,6 +20,10 @@ export async function DELETE(
     const { id } = await params
     const mode = new URL(request.url).searchParams.get('mode')
 
+    if (mode && mode !== 'delete') {
+      return NextResponse.json({ error: 'Invalid invite action' }, { status: 400 })
+    }
+
     const invite = await prisma.teamInvite.findUnique({
       where: { id },
       select: { id: true, status: true },
@@ -51,8 +55,11 @@ export async function DELETE(
 
     return NextResponse.json({ success: true, invite: revoked })
   } catch (error: any) {
+    const mode = new URL(request.url).searchParams.get('mode')
+    const fallback = mode === 'delete' ? 'Failed to delete invite' : 'Failed to revoke invite'
+
     return NextResponse.json(
-      { error: error.message || 'Failed to revoke invite' },
+      { error: fallback },
       { status: 500 }
     )
   }

@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth/auth'
 import { prisma } from '@/lib/db/prisma'
 import { canManageLeads, getUserRole } from '@/lib/auth/permissions'
+import {
+  isLeadDetailsEmailConfigured,
+  sendLeadDetailsEmail,
+} from '@/lib/notifications/lead-details-email'
 
 // GET - List all leads
 export async function GET(request: Request) {
@@ -142,12 +146,49 @@ export async function POST(request: Request) {
       },
     })
 
-    // TODO: Send notifications (Telegram, WhatsApp, Email)
-    // We'll add this in Day 8
+    let leadEmailSent = false
+    let leadEmailError: string | null = null
+
+    if (email && isLeadDetailsEmailConfigured()) {
+      try {
+        const appName = process.env.APP_NAME?.trim() || 'Multi-Role CRM'
+        const appUrl =
+          process.env.APP_URL?.trim() ||
+          process.env.NEXTAUTH_URL?.trim() ||
+          process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
+          ''
+
+        await sendLeadDetailsEmail({
+          to: email,
+          appName,
+          leadUrl: appUrl ? `${appUrl}/leads/${lead.id}` : undefined,
+          lead: {
+            id: lead.id,
+            name: lead.name,
+            email: lead.email,
+            phone: lead.phone,
+            company: lead.company,
+            service: lead.service,
+            budget: lead.budget,
+            source: lead.source,
+            message: lead.message,
+            status: lead.status,
+            score: lead.score,
+            createdAt: lead.createdAt,
+          },
+        })
+        leadEmailSent = true
+      } catch (error: any) {
+        console.error('Lead details email error:', error)
+        leadEmailError = error?.message || 'Failed to send lead details email'
+      }
+    }
 
     return NextResponse.json({
       success: true,
       lead,
+      leadEmailSent,
+      leadEmailError,
       message: 'Lead created successfully',
     })
   } catch (error: any) {

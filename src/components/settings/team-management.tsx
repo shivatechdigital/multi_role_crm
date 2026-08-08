@@ -56,7 +56,24 @@ type TeamInvite = {
   createdAt: string
 }
 
-type InviteFilter = 'pending' | 'accepted' | 'revoked'
+type InviteFilter = 'all' | 'pending' | 'accepted' | 'revoked'
+
+function normalizeInviteStatus(status: string) {
+  return status.trim().toLowerCase()
+}
+
+function getFriendlyInviteError(message: string | undefined, fallback: string) {
+  if (!message) return fallback
+
+  if (message.includes('TeamInvite') || message.includes('prisma.teamInvite')) {
+    return 'Invite setup is incomplete. Please run latest database migrations.'
+  }
+
+  if (message.includes('Unauthorized')) return 'Please sign in again to continue.'
+  if (message.includes('Forbidden')) return 'You do not have permission for this action.'
+
+  return message
+}
 
 interface TeamManagementProps {
   currentRole: string
@@ -72,13 +89,13 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
   const [inviteEmail, setInviteEmail] = useState('')
   const [inviteRole, setInviteRole] = useState<AppRole>('USER')
   const [isCreatingInvite, setIsCreatingInvite] = useState(false)
-  const [activeInviteFilter, setActiveInviteFilter] = useState<InviteFilter>('pending')
+  const [activeInviteFilter, setActiveInviteFilter] = useState<InviteFilter>('all')
 
   const canViewTeam = canManageTeam(currentRole)
   const canEditRoles = canManageRoles(currentRole)
   const canInviteUsers = canManageInvites(currentRole)
 
-  const normalizeInviteStatus = (status: string) => status.trim().toLowerCase()
+  const allCount = invites.length
   const pendingCount = invites.filter(
     (invite) => normalizeInviteStatus(invite.status) === 'pending'
   ).length
@@ -88,9 +105,12 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
   const revokedCount = invites.filter(
     (invite) => normalizeInviteStatus(invite.status) === 'revoked'
   ).length
-  const filteredInvites = invites.filter(
-    (invite) => normalizeInviteStatus(invite.status) === activeInviteFilter
-  )
+  const filteredInvites =
+    activeInviteFilter === 'all'
+      ? invites
+      : invites.filter(
+          (invite) => normalizeInviteStatus(invite.status) === activeInviteFilter
+        )
 
   useEffect(() => {
     if (!canViewTeam) {
@@ -105,7 +125,9 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
         const data = await response.json()
 
         if (!response.ok) {
-          throw new Error(data.error || 'Failed to load team members')
+          throw new Error(
+            getFriendlyInviteError(data.error, 'Failed to load team members')
+          )
         }
 
         setTeam(data)
@@ -131,7 +153,7 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
         const data = await response.json()
 
         if (!response.ok) {
-          throw new Error(data.error || 'Failed to load invites')
+          throw new Error(getFriendlyInviteError(data.error, 'Failed to load invites'))
         }
 
         setInvites(data.invites || [])
@@ -158,7 +180,7 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
 
       const data = await response.json()
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to update role')
+        throw new Error(getFriendlyInviteError(data.error, 'Failed to update role'))
       }
 
       setTeam((currentTeam) => {
@@ -208,7 +230,7 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
 
       const data = await response.json()
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to create invite')
+        throw new Error(getFriendlyInviteError(data.error, 'Failed to create invite'))
       }
 
       setInvites((currentInvites) => [data.invite, ...currentInvites])
@@ -244,7 +266,7 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
 
       const data = await response.json()
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to revoke invite')
+        throw new Error(getFriendlyInviteError(data.error, 'Failed to revoke invite'))
       }
 
       setInvites((currentInvites) =>
@@ -260,6 +282,15 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
   }
 
   const handleDeleteInvite = async (inviteId: string) => {
+    const confirmed =
+      typeof window !== 'undefined'
+        ? window.confirm('Delete this invite permanently? This cannot be undone.')
+        : true
+
+    if (!confirmed) {
+      return
+    }
+
     try {
       const response = await fetch(`/api/invites/${inviteId}?mode=delete`, {
         method: 'DELETE',
@@ -267,7 +298,7 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
 
       const data = await response.json()
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to delete invite')
+        throw new Error(getFriendlyInviteError(data.error, 'Failed to delete invite'))
       }
 
       setInvites((currentInvites) =>
@@ -441,6 +472,14 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
               ) : invites.length ? (
                 <>
                   <div className="flex flex-wrap gap-2 pb-1">
+                    <Button
+                      type="button"
+                      variant={activeInviteFilter === 'all' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setActiveInviteFilter('all')}
+                    >
+                      All ({allCount})
+                    </Button>
                     <Button
                       type="button"
                       variant={activeInviteFilter === 'pending' ? 'default' : 'outline'}

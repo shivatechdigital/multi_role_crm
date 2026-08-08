@@ -39,7 +39,15 @@ export default function NewLeadPage() {
     
     try {
       const result = await createLead.mutateAsync(formData)
-      toast.success('Lead created successfully!')
+
+      if (result.leadEmailSent) {
+        toast.success('Lead created and details email sent successfully!')
+      } else if (result.leadEmailError) {
+        toast.warning('Lead created, but details email could not be sent.')
+      } else {
+        toast.success('Lead created successfully!')
+      }
+
       router.push(`/leads/${result.lead.id}`)
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Failed to create lead')
@@ -136,10 +144,14 @@ export default function NewLeadPage() {
                   value={formData.service} 
                   onValueChange={(value) => setFormData({ ...formData, service: value })}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select service" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent
+                    position="popper"
+                    sideOffset={4}
+                    className="z-[100] w-[var(--radix-select-trigger-width)]"
+                  >
                     <SelectItem value="seo">SEO</SelectItem>
                     <SelectItem value="web_development">Web Development</SelectItem>
                     <SelectItem value="digital_marketing">Digital Marketing</SelectItem>
@@ -157,10 +169,14 @@ export default function NewLeadPage() {
                   value={formData.budget} 
                   onValueChange={(value) => setFormData({ ...formData, budget: value })}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select budget" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent
+                    position="popper"
+                    sideOffset={4}
+                    className="z-[100] w-[var(--radix-select-trigger-width)]"
+                  >
                     <SelectItem value="<25k">Less than ₹25,000</SelectItem>
                     <SelectItem value="25k-50k">₹25,000 - ₹50,000</SelectItem>
                     <SelectItem value="50k-1L">₹50,000 - ₹1 Lakh</SelectItem>
@@ -178,10 +194,14 @@ export default function NewLeadPage() {
                 value={formData.source} 
                 onValueChange={(value) => setFormData({ ...formData, source: value })}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent
+                  position="popper"
+                  sideOffset={4}
+                  className="z-[100] w-[var(--radix-select-trigger-width)]"
+                >
                   <SelectItem value="manual">Manual Entry</SelectItem>
                   <SelectItem value="website">Website</SelectItem>
                   <SelectItem value="referral">Referral</SelectItem>
