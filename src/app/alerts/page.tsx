@@ -16,9 +16,13 @@ import {
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { formatDistanceToNow } from 'date-fns'
+import { useSession } from 'next-auth/react'
+import { canManageOperations, getUserRole } from '@/lib/auth/permissions'
 
 export default function AlertsPage() {
+  const { data: session } = useSession()
   const queryClient = useQueryClient()
+  const canManage = canManageOperations(getUserRole(session?.user?.role))
   
   const { data, isLoading } = useQuery({
     queryKey: ['alerts'],
@@ -160,13 +164,15 @@ export default function AlertsPage() {
                               <CheckCircle2 className="w-4 h-4" />
                             </Button>
                           )}
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => deleteAlert.mutate(alert.id)}
-                          >
-                            <Trash2 className="w-4 h-4 text-destructive" />
-                          </Button>
+                          {canManage && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => deleteAlert.mutate(alert.id)}
+                            >
+                              <Trash2 className="w-4 h-4 text-destructive" />
+                            </Button>
+                          )}
                         </div>
                       </div>
                     </div>

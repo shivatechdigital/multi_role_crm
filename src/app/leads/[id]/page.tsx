@@ -47,6 +47,8 @@ import {
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { formatDistanceToNow, format } from 'date-fns'
+import { useSession } from 'next-auth/react'
+import { canManageLeads, getUserRole } from '@/lib/auth/permissions'
 
 export default function LeadDetailPage({
   params,
@@ -55,6 +57,7 @@ export default function LeadDetailPage({
 }) {
   const { id } = use(params)
   const router = useRouter()
+  const { data: session } = useSession()
   
   const { data, isLoading, error } = useLead(id)
   const updateLead = useUpdateLead()
@@ -63,6 +66,7 @@ export default function LeadDetailPage({
 
   const [activityNote, setActivityNote] = useState('')
   const [activityType, setActivityType] = useState('note')
+  const canDeleteLead = canManageLeads(getUserRole(session?.user?.role))
 
   const lead = data?.lead
 
@@ -194,27 +198,29 @@ export default function LeadDetailPage({
               </SelectContent>
             </Select>
 
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Trash2 className="w-4 h-4 text-destructive" />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Delete this lead?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. All activity history will be permanently deleted.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDelete} className="bg-destructive">
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            {canDeleteLead && (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outline" size="icon">
+                    <Trash2 className="w-4 h-4 text-destructive" />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete this lead?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. All activity history will be permanently deleted.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDelete} className="bg-destructive">
+                      Delete
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
           </div>
         </div>
       </div>

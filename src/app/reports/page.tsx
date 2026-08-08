@@ -8,13 +8,22 @@ import { DateRangePicker } from "@/components/dashboard/date-range-picker"
 import { Download, FileText } from "lucide-react"
 import { useDateRangeStore } from "@/store/date-range-store"
 import { toast } from "sonner"
+import { useSession } from 'next-auth/react'
+import { canManageOperations, getUserRole } from '@/lib/auth/permissions'
 
 export default function ReportsPage() {
+  const { data: session } = useSession()
   const days = useDateRangeStore((s) => s.days)
   const [report, setReport] = useState<any>(null)
   const [loading, setLoading] = useState(false)
+  const canGenerate = canManageOperations(getUserRole(session?.user?.role))
 
   const generateReport = async () => {
+    if (!canGenerate) {
+      toast.error('Only managers and admins can generate reports')
+      return
+    }
+
     setLoading(true)
     try {
       const { data } = await axios.post("/api/reports/generate", { days })
@@ -53,6 +62,12 @@ export default function ReportsPage() {
         <FileText className="w-4 h-4 mr-2" />
         {loading ? "Generating..." : "Generate Report"}
       </Button>
+
+      {!canGenerate && (
+        <p className="text-sm text-muted-foreground">
+          Report generation is restricted to managers and admins.
+        </p>
+      )}
 
       {report && (
         <Card>

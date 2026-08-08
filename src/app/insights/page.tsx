@@ -32,9 +32,13 @@ import {
 import { toast } from 'sonner'
 import { formatDistanceToNow } from 'date-fns'
 import ReactMarkdown from 'react-markdown'
+import { useSession } from 'next-auth/react'
+import { canManageOperations, getUserRole } from '@/lib/auth/permissions'
 
 export default function InsightsPage() {
+  const { data: session } = useSession()
   const [selectedType, setSelectedType] = useState<string | undefined>()
+  const canManage = canManageOperations(getUserRole(session?.user?.role))
   
   const { data, isLoading } = useInsights(selectedType)
   const generateInsight = useGenerateInsight()
@@ -92,7 +96,9 @@ export default function InsightsPage() {
             Generate New Insights
           </CardTitle>
           <CardDescription>
-            Choose what you want AI to analyze for you
+            {canManage
+              ? 'Choose what you want AI to analyze for you'
+              : 'Only managers and admins can generate new insights'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -102,7 +108,7 @@ export default function InsightsPage() {
               size="lg"
               className="h-auto py-4 flex-col items-start gap-2"
               onClick={() => handleGenerate('overview')}
-              disabled={generateInsight.isPending}
+              disabled={generateInsight.isPending || !canManage}
             >
               <div className="flex items-center gap-2 w-full">
                 <TrendingUp className="w-5 h-5 text-blue-500" />
@@ -118,7 +124,7 @@ export default function InsightsPage() {
               size="lg"
               className="h-auto py-4 flex-col items-start gap-2"
               onClick={() => handleGenerate('opportunities')}
-              disabled={generateInsight.isPending}
+              disabled={generateInsight.isPending || !canManage}
             >
               <div className="flex items-center gap-2 w-full">
                 <Target className="w-5 h-5 text-green-500" />
@@ -134,7 +140,7 @@ export default function InsightsPage() {
               size="lg"
               className="h-auto py-4 flex-col items-start gap-2"
               onClick={() => handleGenerate('content_ideas')}
-              disabled={generateInsight.isPending}
+              disabled={generateInsight.isPending || !canManage}
             >
               <div className="flex items-center gap-2 w-full">
                 <Lightbulb className="w-5 h-5 text-orange-500" />
@@ -252,6 +258,7 @@ export default function InsightsPage() {
             <InsightCard
               key={insight.id}
               insight={insight}
+              canDelete={canManage}
               onMarkActioned={() => handleMarkAsActioned(insight.id)}
               onDelete={() => handleDelete(insight.id)}
             />
@@ -264,10 +271,12 @@ export default function InsightsPage() {
 
 function InsightCard({
   insight,
+  canDelete,
   onMarkActioned,
   onDelete,
 }: {
   insight: any
+  canDelete: boolean
   onMarkActioned: () => void
   onDelete: () => void
 }) {
@@ -302,27 +311,29 @@ function InsightCard({
                 Mark Done
               </Button>
             )}
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Trash2 className="w-4 h-4 text-destructive" />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Delete this insight?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={onDelete} className="bg-destructive">
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            {canDelete && (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outline" size="icon">
+                    <Trash2 className="w-4 h-4 text-destructive" />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete this insight?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={onDelete} className="bg-destructive">
+                      Delete
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
           </div>
         </div>
       </CardHeader>
