@@ -103,7 +103,13 @@ export async function POST(request: Request) {
       },
     })
 
-    const origin = new URL(request.url).origin
+    const configuredBaseUrl =
+      process.env.APP_URL?.trim() ||
+      process.env.NEXTAUTH_URL?.trim() ||
+      process.env.NEXT_PUBLIC_SITE_URL?.trim()
+    const origin = configuredBaseUrl
+      ? configuredBaseUrl.replace(/\/$/, '')
+      : new URL(request.url).origin
     const inviteUrl = `${origin}/invite?token=${token}`
     let emailSent = false
     let emailError: string | null = null
