@@ -163,7 +163,7 @@ export default function RealtimePage() {
                   return (
                     <div
                       key={i}
-                      className="flex items-center justify-between p-3 rounded-lg bg-muted/50"
+                      className="flex flex-col gap-3 rounded-lg bg-muted/50 p-3 sm:flex-row sm:items-center sm:justify-between"
                     >
                       <div className="flex items-center gap-3 flex-1">
                         <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
@@ -171,7 +171,7 @@ export default function RealtimePage() {
                         </div>
                         <span className="font-medium">{country.country}</span>
                       </div>
-                      <div className="flex items-center gap-3">
+                      <div className="flex flex-wrap items-center gap-3">
                         <div className="w-24 bg-muted rounded-full h-2 overflow-hidden">
                           <div
                             className="h-full bg-green-500 rounded-full transition-all"
@@ -216,7 +216,7 @@ export default function RealtimePage() {
                 {data.pages.map((page: any, i: number) => (
                   <div
                     key={i}
-                    className="flex items-center justify-between p-3 rounded-lg bg-muted/50"
+                    className="flex flex-col gap-3 rounded-lg bg-muted/50 p-3 sm:flex-row sm:items-center sm:justify-between"
                   >
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                       <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-xs font-bold text-primary flex-shrink-0">

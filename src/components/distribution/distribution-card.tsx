@@ -32,7 +32,7 @@ export function DistributionCard({ distribution }: DistributionCardProps) {
             <h3 className="font-semibold text-base mb-1 line-clamp-2">
               {distribution.blogTitle}
             </h3>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
               {distribution.blogCategory && (
                 <Badge variant="outline" className="text-xs">
                   {distribution.blogCategory}
@@ -70,14 +70,14 @@ export function DistributionCard({ distribution }: DistributionCardProps) {
         </div>
         
         {/* Platform Posts Grid */}
-        <div className="grid grid-cols-4 gap-2 mb-4">
+        <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
           {distribution.posts.map((post: any) => (
             <PlatformPostBadge key={post.id} post={post} />
           ))}
         </div>
         
         {/* Actions */}
-        <div className="flex gap-2 pt-3 border-t border-border/40">
+        <div className="flex flex-col gap-2 border-t border-border/40 pt-3 sm:flex-row">
           <Button
             variant="outline"
             size="sm"
@@ -98,7 +98,7 @@ export function DistributionCard({ distribution }: DistributionCardProps) {
             <Button
               variant="outline"
               size="sm"
-              className="h-8 text-xs"
+              className="h-8 text-xs sm:w-auto"
             >
               <CheckCircle2 className="h-3 w-3 mr-1 text-green-400" />
               {distribution.successCount} Posted

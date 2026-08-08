@@ -125,7 +125,7 @@ export function PagesFilters({
       </div>
       
       {/* Filter Status */}
-      <div className="flex items-center justify-between text-xs">
+      <div className="flex flex-col gap-2 text-xs sm:flex-row sm:items-center sm:justify-between">
         <p className="text-muted-foreground">
           Showing <span className="font-semibold text-foreground">{filteredCount}</span> of{' '}
           <span className="font-semibold text-foreground">{totalCount}</span> pages
@@ -135,7 +135,7 @@ export function PagesFilters({
             variant="ghost"
             size="sm"
             onClick={resetFilters}
-            className="h-7 text-xs"
+            className="h-7 self-start text-xs"
           >
             <X className="h-3 w-3 mr-1" />
             Clear filters

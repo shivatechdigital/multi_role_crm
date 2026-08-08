@@ -46,8 +46,8 @@ export function StatsCard({
         highlight && 'border-primary shadow-sm'
       )}
     >
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between">
+      <CardContent className="p-4 sm:p-6">
+        <div className="flex items-start justify-between gap-3">
           <div className="flex-1">
             <p className="text-sm font-medium text-muted-foreground">{title}</p>
             
@@ -57,7 +57,7 @@ export function StatsCard({
               <p className="text-sm text-destructive mt-2">Error</p>
             ) : (
               <div className="mt-2">
-                <p className="text-3xl font-bold tracking-tight">
+                <p className="text-2xl font-bold tracking-tight sm:text-3xl">
                   {typeof value === 'number' ? value.toLocaleString() : value}
                 </p>
                 {description && (
@@ -79,10 +79,10 @@ export function StatsCard({
           </div>
           
           <div className={cn(
-            'w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center',
+            'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br sm:h-12 sm:w-12',
             colorClasses[color]
           )}>
-            <Icon className="w-6 h-6" />
+            <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
           </div>
         </div>
       </CardContent>

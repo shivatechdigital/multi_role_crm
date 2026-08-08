@@ -93,7 +93,7 @@ export default function LoginPage() {
       </div>
 
       {/* Right Side - Login Form */}
-      <div className="flex-1 flex items-center justify-center p-8">
+      <div className="flex flex-1 items-center justify-center p-4 sm:p-8">
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center gap-3 mb-8">
@@ -108,7 +108,7 @@ export default function LoginPage() {
               <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-2">
                 <Zap className="w-8 h-8 text-primary" />
               </div>
-              <CardTitle className="text-3xl font-bold">Welcome Back</CardTitle>
+              <CardTitle className="text-2xl font-bold sm:text-3xl">Welcome Back</CardTitle>
               <CardDescription className="text-base">
                 Sign in to access your dashboard
               </CardDescription>

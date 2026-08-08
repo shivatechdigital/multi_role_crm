@@ -35,6 +35,11 @@ interface MenuSection {
   items: MenuItem[]
 }
 
+interface SidebarProps {
+  isOpen?: boolean
+  onClose?: () => void
+}
+
 const menuSections: MenuSection[] = [
   {
     title: 'Overview',
@@ -94,11 +99,16 @@ const menuSections: MenuSection[] = [
   },
 ]
 
-export function Sidebar() {
+export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname()
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r bg-white dark:bg-gray-900 dark:border-gray-800">
+    <aside
+      className={cn(
+        'fixed inset-y-0 left-0 z-40 h-screen w-72 max-w-[85vw] border-r bg-white transition-transform duration-200 dark:border-gray-800 dark:bg-gray-900 lg:w-64 lg:max-w-none',
+        isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+      )}
+    >
       <div className="flex h-full flex-col">
         {/* Logo */}
         <div className="flex h-16 items-center gap-3 border-b px-6 dark:border-gray-800">
@@ -129,6 +139,7 @@ export function Sidebar() {
                     <Link
                       key={item.href}
                       href={item.href}
+                      onClick={onClose}
                       className={cn(
                         'group flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors',
                         isActive

@@ -266,7 +266,7 @@ export default function EditPagePage({ params }: PageProps) {
       
       {/* Tabs Editor */}
       <Tabs defaultValue="meta" className="space-y-6">
-        <TabsList className="grid w-full max-w-2xl grid-cols-4">
+        <TabsList className="grid h-auto w-full grid-cols-2 gap-1 lg:max-w-2xl lg:grid-cols-4">
           <TabsTrigger value="meta" className="flex items-center gap-2">
             <Tag className="h-4 w-4" />
             <span className="hidden sm:inline">Meta</span>

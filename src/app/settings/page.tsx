@@ -59,31 +59,31 @@ export default function SettingsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Settings ⚙️</h1>
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Settings ⚙️</h1>
         <p className="text-muted-foreground mt-1">
           Manage your account and platform preferences
         </p>
       </div>
 
       <Tabs defaultValue="profile" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5 lg:w-[600px]">
-          <TabsTrigger value="profile">
+        <TabsList className="grid h-auto w-full grid-cols-2 gap-1 sm:grid-cols-3 lg:w-[600px] lg:grid-cols-5">
+          <TabsTrigger value="profile" className="text-xs sm:text-sm">
             <User className="w-4 h-4 mr-2" />
             Profile
           </TabsTrigger>
-          <TabsTrigger value="appearance">
+          <TabsTrigger value="appearance" className="text-xs sm:text-sm">
             <Palette className="w-4 h-4 mr-2" />
             Theme
           </TabsTrigger>
-          <TabsTrigger value="integrations">
+          <TabsTrigger value="integrations" className="text-xs sm:text-sm">
             <Plug className="w-4 h-4 mr-2" />
             Integrations
           </TabsTrigger>
-          <TabsTrigger value="notifications">
+          <TabsTrigger value="notifications" className="text-xs sm:text-sm">
             <Bell className="w-4 h-4 mr-2" />
             Alerts
           </TabsTrigger>
-          <TabsTrigger value="security">
+          <TabsTrigger value="security" className="text-xs sm:text-sm">
             <Shield className="w-4 h-4 mr-2" />
             Security
           </TabsTrigger>
@@ -97,7 +97,7 @@ export default function SettingsPage() {
               <CardDescription>Your account details from Google</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center gap-4">
+              <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                 <Avatar className="h-20 w-20">
                   <AvatarImage src={session?.user?.image || ''} />
                   <AvatarFallback className="bg-primary text-primary-foreground text-xl">
@@ -155,7 +155,7 @@ export default function SettingsPage() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-3 gap-3 pt-4">
+              <div className="grid grid-cols-1 gap-3 pt-4 sm:grid-cols-3">
                 <ThemePreview
                   theme="light"
                   selected={theme === 'light'}
@@ -236,7 +236,7 @@ export default function SettingsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 <Input value={webhookUrl} readOnly className="font-mono text-sm" />
                 <Button onClick={copyWebhook}>
                   <Copy className="w-4 h-4 mr-2" />
@@ -385,7 +385,7 @@ function IntegrationItem({
   const StatusIcon = config.icon
 
   return (
-    <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+    <div className="flex flex-col gap-3 rounded-lg bg-muted/50 p-3 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-3 flex-1">
         <div className="w-10 h-10 rounded-lg bg-background flex items-center justify-center">
           {icon}
@@ -395,7 +395,7 @@ function IntegrationItem({
           <p className="text-xs text-muted-foreground">{description}</p>
         </div>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 self-start sm:self-auto">
         <StatusIcon className={`w-4 h-4 ${config.color}`} />
         <Badge variant={config.badge as any}>{config.label}</Badge>
       </div>
@@ -413,12 +413,12 @@ function NotificationSetting({
   defaultChecked?: boolean
 }) {
   return (
-    <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+    <div className="flex flex-col gap-3 rounded-lg bg-muted/50 p-3 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex-1">
         <p className="font-medium text-sm">{title}</p>
         <p className="text-xs text-muted-foreground">{description}</p>
       </div>
-      <Switch defaultChecked={defaultChecked} />
+      <Switch defaultChecked={defaultChecked} className="self-start sm:self-auto" />
     </div>
   )
 }

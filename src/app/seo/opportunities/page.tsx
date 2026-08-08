@@ -38,7 +38,7 @@ export default function OpportunitiesPage() {
       {/* Header */}
       <div className="flex flex-col gap-3">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
+          <h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight sm:text-3xl">
             SEO Opportunities <Sparkles className="h-7 w-7 text-yellow-400" />
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -116,17 +116,17 @@ export default function OpportunitiesPage() {
       {/* Tabs */}
       {!error && (
         <Tabs defaultValue="top" className="space-y-4">
-          <TabsList className="grid w-full max-w-2xl grid-cols-4">
-            <TabsTrigger value="top">
+          <TabsList className="grid h-auto w-full grid-cols-2 gap-1 lg:grid-cols-4">
+            <TabsTrigger value="top" className="text-xs sm:text-sm">
               ⭐ Top ({stats?.topOpportunities?.length || 0})
             </TabsTrigger>
-            <TabsTrigger value="quick">
+            <TabsTrigger value="quick" className="text-xs sm:text-sm">
               ⚡ Quick Wins ({opps?.quickWins?.length || 0})
             </TabsTrigger>
-            <TabsTrigger value="ctr">
+            <TabsTrigger value="ctr" className="text-xs sm:text-sm">
               📉 CTR ({(opps?.ctrIssues?.length || 0) + (opps?.pageCtrIssues?.length || 0)})
             </TabsTrigger>
-            <TabsTrigger value="striking">
+            <TabsTrigger value="striking" className="text-xs sm:text-sm">
               🎯 Close ({opps?.strikingDistance?.length || 0})
             </TabsTrigger>
           </TabsList>

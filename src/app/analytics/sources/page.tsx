@@ -192,7 +192,7 @@ export default function SourcesAnalyticsPage() {
               {data.topSources.map((source: any, i: number) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+                  className="flex flex-col gap-3 rounded-lg bg-muted/50 p-4 transition-colors hover:bg-muted sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-sm font-bold text-primary flex-shrink-0">
@@ -207,12 +207,12 @@ export default function SourcesAnalyticsPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-6 text-sm">
-                    <div className="text-right">
+                  <div className="flex flex-wrap items-center gap-4 text-sm sm:gap-6">
+                    <div className="text-left sm:text-right">
                       <p className="font-bold">{source.users.toLocaleString()}</p>
                       <p className="text-xs text-muted-foreground">users</p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-left sm:text-right">
                       <p className="font-bold">{source.sessions.toLocaleString()}</p>
                       <p className="text-xs text-muted-foreground">sessions</p>
                     </div>

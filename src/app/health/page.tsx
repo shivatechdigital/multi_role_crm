@@ -47,7 +47,7 @@ export default function HealthOverviewPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Technical Health 🏥</h1>
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Technical Health 🏥</h1>
         <p className="text-muted-foreground mt-1">
           Monitor your website's technical performance and SEO health
         </p>
@@ -55,14 +55,14 @@ export default function HealthOverviewPage() {
 
       {/* Overall Health Card */}
       <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
-        <CardContent className="p-8">
+        <CardContent className="p-5 sm:p-8">
           {isLoading ? (
             <Skeleton className="h-40 w-full" />
           ) : (
-            <div className="flex flex-col lg:flex-row items-center gap-8">
+            <div className="flex flex-col items-center gap-6 lg:flex-row lg:gap-8">
               <ScoreCard label="Overall Health" score={overallHealth} size="lg" />
               
-              <div className="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <HealthStat
                   icon={Activity}
                   label="Uptime"
@@ -98,7 +98,7 @@ export default function HealthOverviewPage() {
         {/* Mobile Scores */}
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <Smartphone className="w-5 h-5" />
@@ -135,7 +135,7 @@ export default function HealthOverviewPage() {
                 </Link>
               </div>
             ) : (
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                 <ScoreCard label="Performance" score={mobile.performance} size="sm" />
                 <ScoreCard label="Accessibility" score={mobile.accessibility} size="sm" />
                 <ScoreCard label="Best Practices" score={mobile.bestPractices} size="sm" />
@@ -148,7 +148,7 @@ export default function HealthOverviewPage() {
         {/* Desktop Scores */}
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <Monitor className="w-5 h-5" />
@@ -179,7 +179,7 @@ export default function HealthOverviewPage() {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                 <ScoreCard label="Performance" score={desktop.performance} size="sm" />
                 <ScoreCard label="Accessibility" score={desktop.accessibility} size="sm" />
                 <ScoreCard label="Best Practices" score={desktop.bestPractices} size="sm" />
@@ -195,7 +195,7 @@ export default function HealthOverviewPage() {
         {/* Uptime Card */}
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <Activity className="w-5 h-5" />
@@ -216,7 +216,7 @@ export default function HealthOverviewPage() {
               <Skeleton className="h-32 w-full" />
             ) : (
               <div className="space-y-4">
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                   <div className={`w-3 h-3 rounded-full ${
                     uptime?.status === 'UP' ? 'bg-green-500 animate-pulse' : 'bg-red-500'
                   }`} />
@@ -236,7 +236,7 @@ export default function HealthOverviewPage() {
                   </Badge>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 pt-4 border-t">
+                <div className="grid grid-cols-1 gap-3 border-t pt-4 sm:grid-cols-3">
                   <div>
                     <p className="text-xs text-muted-foreground">Response Time</p>
                     <p className="text-xl font-bold">{uptime?.responseTime || 0}ms</p>
@@ -273,7 +273,7 @@ export default function HealthOverviewPage() {
               <Skeleton className="h-32 w-full" />
             ) : (
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                <div className="flex flex-col gap-2 rounded-lg bg-muted/50 p-3 sm:flex-row sm:items-center sm:justify-between">
                   <span className="text-sm">SEO Score</span>
                   <Badge variant={seo?.score >= 80 ? 'default' : 'secondary'}>
                     {seo?.score || 0}/100

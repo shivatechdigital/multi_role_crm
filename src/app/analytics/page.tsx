@@ -41,7 +41,7 @@ export default function AnalyticsPage() {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Analytics 📊</h1>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Analytics 📊</h1>
           <p className="text-muted-foreground mt-1">
             Complete website analytics and user behavior
           </p>
@@ -205,7 +205,7 @@ export default function AnalyticsPage() {
                 return (
                   <div
                     key={i}
-                    className="flex items-center justify-between p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+                    className="flex flex-col gap-3 rounded-lg bg-muted/50 p-4 transition-colors hover:bg-muted sm:flex-row sm:items-center sm:justify-between"
                   >
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                       <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-lg flex-shrink-0">
@@ -215,8 +215,8 @@ export default function AnalyticsPage() {
                         <p className="font-medium text-sm truncate">
                           {channel.name.split(' ').slice(1).join(' ')}
                         </p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <div className="flex-1 max-w-[200px] bg-muted rounded-full h-1.5 overflow-hidden">
+                        <div className="mt-1 flex items-center gap-2">
+                          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted sm:max-w-[200px]">
                             <div 
                               className="h-full bg-primary rounded-full transition-all"
                               style={{ width: `${percentage}%` }}
@@ -226,7 +226,7 @@ export default function AnalyticsPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="text-right ml-4">
+                    <div className="ml-0 text-left sm:ml-4 sm:text-right">
                       <p className="font-bold text-lg">{channel.users.toLocaleString()}</p>
                       <p className="text-xs text-muted-foreground">users</p>
                     </div>

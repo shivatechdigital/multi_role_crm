@@ -35,7 +35,7 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
             Welcome back, {userName}! 👋
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -211,7 +211,7 @@ function TopPagesList({ data, isLoading }: { data: any[]; isLoading: boolean }) 
             {data.slice(0, 5).map((page: any, i: number) => (
               <div
                 key={i}
-                className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors group"
+                className="group flex flex-col gap-3 rounded-lg bg-muted/50 p-3 transition-colors hover:bg-muted sm:flex-row sm:items-center sm:justify-between"
               >
                 <div className="flex items-center gap-3 flex-1 min-w-0">
                   <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-xs font-bold text-primary flex-shrink-0">
@@ -222,7 +222,7 @@ function TopPagesList({ data, isLoading }: { data: any[]; isLoading: boolean }) 
                     <p className="text-xs text-muted-foreground truncate">{page.pageUrl}</p>
                   </div>
                 </div>
-                <div className="text-right ml-2">
+                <div className="ml-0 text-left sm:ml-2 sm:text-right">
                   <p className="font-bold text-sm">{page.pageviews.toLocaleString()}</p>
                   <p className="text-xs text-muted-foreground">views</p>
                 </div>
@@ -258,9 +258,9 @@ function TopCountriesList({ data, isLoading }: { data: any[]; isLoading: boolean
             {data.slice(0, 5).map((country: any, i: number) => (
               <div
                 key={i}
-                className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+                className="flex flex-col gap-3 rounded-lg bg-muted/50 p-3 transition-colors hover:bg-muted sm:flex-row sm:items-center sm:justify-between"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
                     {i + 1}
                   </div>

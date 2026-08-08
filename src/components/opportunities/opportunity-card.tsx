@@ -29,7 +29,7 @@ export function OpportunityCard({ opportunity }: OpportunityCardProps) {
     <Card className={`hover:border-primary/40 transition-all ${typeConfig.border}`}>
       <CardContent className="p-5">
         {/* Header */}
-        <div className="flex items-start justify-between gap-3 mb-3">
+        <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-center gap-2 flex-wrap">
             <Badge variant="outline" className={`${typeConfig.bg} ${typeConfig.text} ${typeConfig.border} text-xs`}>
               <typeConfig.Icon className="h-3 w-3 mr-1" />
@@ -41,7 +41,7 @@ export function OpportunityCard({ opportunity }: OpportunityCardProps) {
           </div>
           
           {/* Impact Score */}
-          <div className="text-right">
+          <div className="text-left sm:text-right">
             <div className="text-xs text-muted-foreground">Impact</div>
             <div className={`text-lg font-bold ${getImpactColor(opportunity.impactScore)}`}>
               {opportunity.impactScore.toFixed(0)}
@@ -64,7 +64,7 @@ export function OpportunityCard({ opportunity }: OpportunityCardProps) {
         </div>
         
         {/* Stats Grid */}
-        <div className="grid grid-cols-4 gap-2 mb-3 p-3 bg-muted/30 rounded-lg">
+        <div className="mb-3 grid grid-cols-2 gap-2 rounded-lg bg-muted/30 p-3 sm:grid-cols-4">
           <div className="text-center">
             <div className="text-[10px] uppercase text-muted-foreground font-semibold">Position</div>
             <div className="text-sm font-bold">#{opportunity.currentPosition.toFixed(0)}</div>
@@ -121,7 +121,7 @@ export function OpportunityCard({ opportunity }: OpportunityCardProps) {
         </details>
         
         {/* Actions */}
-        <div className="flex gap-2 pt-2 border-t border-border/40">
+        <div className="flex flex-col gap-2 border-t border-border/40 pt-2 sm:flex-row">
           {opportunity.page && (
             <Button
               variant="outline"

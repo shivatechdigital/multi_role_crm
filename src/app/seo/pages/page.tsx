@@ -33,7 +33,7 @@ export default function SeoPagesPage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">SEO Pages 📄</h1>
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">SEO Pages 📄</h1>
         <p className="text-muted-foreground">
           View performance metrics and manage on-page SEO for all your pages
         </p>
@@ -41,7 +41,7 @@ export default function SeoPagesPage() {
 
       {/* Tabs */}
       <Tabs defaultValue="manage" className="space-y-6">
-        <TabsList className="grid w-full max-w-md grid-cols-2">
+        <TabsList className="grid h-auto w-full max-w-md grid-cols-2 gap-1">
           <TabsTrigger value="performance" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
             Performance
@@ -75,7 +75,7 @@ function PerformanceTab() {
   return (
     <div className="space-y-6">
       {/* Date Range */}
-      <div className="flex justify-end">
+      <div className="flex justify-stretch sm:justify-end">
         <DateRangePicker />
       </div>
 

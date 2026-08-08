@@ -77,7 +77,7 @@ export default function PageSpeedPage() {
         
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">PageSpeed Insights ⚡</h1>
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">PageSpeed Insights ⚡</h1>
             <p className="text-muted-foreground mt-1">
               {data?.url || 'Loading...'}
             </p>
@@ -85,6 +85,7 @@ export default function PageSpeedPage() {
           <Button
             onClick={handleRunTest}
             disabled={runPageSpeed.isPending || isFetching}
+            className="w-full sm:w-auto"
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${runPageSpeed.isPending ? 'animate-spin' : ''}`} />
             {runPageSpeed.isPending ? 'Running...' : 'Run New Test'}
@@ -94,7 +95,7 @@ export default function PageSpeedPage() {
 
       {/* Mobile/Desktop Tabs */}
       <Tabs value={selectedTab} onValueChange={(v) => setSelectedTab(v as any)}>
-        <TabsList className="grid w-full lg:w-[400px] grid-cols-2">
+        <TabsList className="grid h-auto w-full max-w-md grid-cols-2 gap-1">
           <TabsTrigger value="mobile" className="gap-2">
             <Smartphone className="w-4 h-4" />
             Mobile
@@ -135,7 +136,7 @@ export default function PageSpeedPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4">
                     <ScoreCard label="Performance" score={currentData.performance} size="md" />
                     <ScoreCard label="Accessibility" score={currentData.accessibility} size="md" />
                     <ScoreCard label="Best Practices" score={currentData.bestPractices} size="md" />

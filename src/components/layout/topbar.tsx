@@ -12,6 +12,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Bell, LogOut, Moon, Settings, Sun, User } from 'lucide-react'
+import { Menu } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { signOut, useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
@@ -36,7 +37,7 @@ function getPageTitle(pathname: string): string {
   return titles[pathname] || 'Dashboard'
 }
 
-export function Topbar() {
+export function Topbar({ onMenuToggle }: { onMenuToggle: () => void }) {
   const { theme, setTheme } = useTheme()
   const { data: session } = useSession()
   const [mounted, setMounted] = useState(false)
@@ -55,15 +56,27 @@ export function Topbar() {
     .slice(0, 2) || 'U'
 
   return (
-    <header className="h-16 border-b bg-card sticky top-0 z-30">
-      <div className="h-full px-6 flex items-center justify-between">
+    <header className="sticky top-0 z-20 h-16 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
+      <div className="flex h-full items-center justify-between gap-3 px-4 sm:px-6">
         {/* Left - Page Title */}
-        <div className="lg:ml-0 ml-12">
-          <h2 className="text-lg font-semibold">{pageTitle}</h2>
+        <div className="flex min-w-0 items-center gap-3">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="lg:hidden"
+            onClick={onMenuToggle}
+            aria-label="Open navigation menu"
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+          <div className="min-w-0">
+            <h2 className="truncate text-base font-semibold sm:text-lg">{pageTitle}</h2>
+          </div>
         </div>
 
         {/* Right - Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           {/* Theme Toggle */}
           {mounted && (
             <Button
@@ -80,7 +93,7 @@ export function Topbar() {
           )}
 
           {/* Notifications */}
-          <Button variant="ghost" size="icon" className="relative">
+          <Button variant="ghost" size="icon" className="relative hidden sm:inline-flex">
             <Bell className="w-5 h-5" />
             <Badge
               variant="destructive"
@@ -93,7 +106,7 @@ export function Topbar() {
           {/* User Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+              <Button variant="ghost" className="relative h-9 w-9 rounded-full sm:h-10 sm:w-10">
                 <Avatar className="h-9 w-9">
                   <AvatarImage src={session?.user?.image || ''} />
                   <AvatarFallback className="bg-primary text-primary-foreground">

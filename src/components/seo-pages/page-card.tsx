@@ -50,7 +50,7 @@ export function PageCard({ page }: PageCardProps) {
         {/* Header Row */}
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="mb-1 flex flex-wrap items-center gap-2">
               <h3 className="font-semibold text-base truncate group-hover:text-primary transition-colors">
                 {niceName}
               </h3>
@@ -146,9 +146,9 @@ export function PageCard({ page }: PageCardProps) {
         </div>
         
         {/* Footer Row */}
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           {/* Last Updated */}
-          <div className="flex items-center gap-2 text-xs text-muted-foreground min-w-0">
+          <div className="flex min-w-0 flex-wrap items-center gap-2 text-xs text-muted-foreground">
             <Clock className="h-3 w-3 flex-shrink-0" />
             <span className="truncate">
               {formatRelativeTime(page.last_optimized_at || page.updated_at)}
@@ -159,7 +159,7 @@ export function PageCard({ page }: PageCardProps) {
           </div>
           
           {/* Actions */}
-          <div className="flex items-center gap-1 flex-shrink-0">
+          <div className="flex items-center gap-1 self-end sm:self-auto">
             {page.url && (
               <Button
                 size="icon"

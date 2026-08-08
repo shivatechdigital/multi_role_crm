@@ -105,9 +105,9 @@ export default function ServicePagesListPage() {
   const websiteUrl = process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://shivatechdigital.com'
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Service Pages
@@ -117,17 +117,18 @@ export default function ServicePagesListPage() {
           </p>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row">
           <Button
             variant="outline"
             onClick={() => setShowImportDialog(true)}
+            className="w-full sm:w-auto"
           >
             <Upload className="mr-2 h-4 w-4" />
             Import HTML
           </Button>
           <Button
             onClick={() => setShowCreateDialog(true)}
-            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 sm:w-auto"
           >
             <Plus className="mr-2 h-4 w-4" />
             Create Page
@@ -283,7 +284,7 @@ export default function ServicePagesListPage() {
             <p className="mb-6 text-sm text-gray-500">
               Get started by creating your first service page or importing existing HTML
             </p>
-            <div className="flex justify-center gap-3">
+            <div className="flex flex-col justify-center gap-3 sm:flex-row">
               <Button onClick={() => setShowCreateDialog(true)}>
                 <Plus className="mr-2 h-4 w-4" />
                 Create First Page

@@ -42,7 +42,7 @@ export default function DistributionPage() {
       {/* Header */}
       <div className="flex flex-col gap-3">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
+          <h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight sm:text-3xl">
             Blog Distribution <Rocket className="h-7 w-7 text-orange-400" />
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -101,7 +101,7 @@ export default function DistributionPage() {
       
       {/* Tabs */}
       <Tabs defaultValue="history" className="space-y-6">
-        <TabsList className="grid w-full max-w-md grid-cols-2">
+        <TabsList className="grid h-auto w-full max-w-md grid-cols-2 gap-1">
           <TabsTrigger value="history" className="flex items-center gap-2">
             <History className="h-4 w-4" />
             History
@@ -218,7 +218,7 @@ function DistributionsSkeleton() {
             <Skeleton className="h-5 w-3/4" />
             <Skeleton className="h-3 w-1/2" />
             <Skeleton className="h-2 w-full" />
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
               {[...Array(8)].map((_, j) => (
                 <Skeleton key={j} className="h-12 rounded-lg" />
               ))}
