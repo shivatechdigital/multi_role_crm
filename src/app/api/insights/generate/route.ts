@@ -4,12 +4,17 @@ import { aiService } from '@/lib/ai/freellm'
 import { gscService } from '@/lib/google/search-console'
 import { prisma } from '@/lib/db/prisma'
 import { getDateRange } from '@/lib/utils/dates'
+import { canManageOperations, getUserRole } from '@/lib/auth/permissions'
 
 export async function POST(request: Request) {
   try {
     const session = await auth()
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    if (!canManageOperations(getUserRole(session.user.role))) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
     const body = await request.json()

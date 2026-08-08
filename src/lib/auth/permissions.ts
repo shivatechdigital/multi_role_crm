@@ -35,3 +35,7 @@ export function canAccessAutomation(role: string | null | undefined) {
 export function canManageLeads(role: string | null | undefined) {
   return hasMinimumRole(role, 'MANAGER')
 }
+
+export function canManageOperations(role: string | null | undefined) {
+  return hasMinimumRole(role, 'MANAGER')
+}
