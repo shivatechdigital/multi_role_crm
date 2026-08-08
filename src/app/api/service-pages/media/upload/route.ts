@@ -2,12 +2,23 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { mediaApi } from '@/lib/api/media'
+import { auth } from '@/lib/auth/auth'
+import { canManageOperations, getUserRole } from '@/lib/auth/permissions'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await auth()
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    if (!canManageOperations(getUserRole(session.user.role))) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
     const formData = await request.formData()
     const file = formData.get('file') as File
     

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import {
   Plus,
   Search,
@@ -56,9 +57,12 @@ import { formatRelativeTime, getStatusColor } from '@/lib/builder/utils'
 import { CreatePageDialog } from '@/components/service-pages/CreatePageDialog'
 import { ImportHtmlDialog } from '@/components/service-pages/ImportHtmlDialog'
 import type { PageStatus, PageType, ServicePage } from '@/lib/types/page-builder'
+import { canManageOperations, getUserRole } from '@/lib/auth/permissions'
 
 export default function ServicePagesListPage() {
   const router = useRouter()
+  const { data: session } = useSession()
+  const canManage = canManageOperations(getUserRole(session?.user?.role))
 
   // State
   const [search, setSearch] = useState('')
@@ -121,6 +125,7 @@ export default function ServicePagesListPage() {
           <Button
             variant="outline"
             onClick={() => setShowImportDialog(true)}
+            disabled={!canManage}
             className="w-full sm:w-auto"
           >
             <Upload className="mr-2 h-4 w-4" />
@@ -128,6 +133,7 @@ export default function ServicePagesListPage() {
           </Button>
           <Button
             onClick={() => setShowCreateDialog(true)}
+            disabled={!canManage}
             className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 sm:w-auto"
           >
             <Plus className="mr-2 h-4 w-4" />
@@ -289,7 +295,7 @@ export default function ServicePagesListPage() {
                 <Plus className="mr-2 h-4 w-4" />
                 Create First Page
               </Button>
-              <Button variant="outline" onClick={() => setShowImportDialog(true)}>
+              <Button variant="outline" onClick={() => setShowImportDialog(true)} disabled={!canManage}>
                 <Upload className="mr-2 h-4 w-4" />
                 Import HTML
               </Button>
@@ -336,22 +342,26 @@ export default function ServicePagesListPage() {
                           </a>
                         </DropdownMenuItem>
                       )}
-                      <DropdownMenuItem onClick={() => handlePublishToggle(page)}>
-                        <Globe className="mr-2 h-4 w-4" />
-                        {page.status === 'published' ? 'Unpublish' : 'Publish'}
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleDuplicate(page.slug)}>
-                        <Copy className="mr-2 h-4 w-4" />
-                        Duplicate
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        className="text-red-600"
-                        onClick={() => setDeleteSlug(page.slug)}
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Delete
-                      </DropdownMenuItem>
+                      {canManage && (
+                        <>
+                          <DropdownMenuItem onClick={() => handlePublishToggle(page)}>
+                            <Globe className="mr-2 h-4 w-4" />
+                            {page.status === 'published' ? 'Unpublish' : 'Publish'}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDuplicate(page.slug)}>
+                            <Copy className="mr-2 h-4 w-4" />
+                            Duplicate
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            className="text-red-600"
+                            onClick={() => setDeleteSlug(page.slug)}
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete
+                          </DropdownMenuItem>
+                        </>
+                      )}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
@@ -397,7 +407,7 @@ export default function ServicePagesListPage() {
                   >
                     <Link href={`/service-pages/builder/${page.slug}`}>
                       <Edit className="mr-1 h-3 w-3" />
-                      Edit
+                      {canManage ? 'Edit' : 'View'}
                     </Link>
                   </Button>
                 </div>

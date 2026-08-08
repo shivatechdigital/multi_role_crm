@@ -12,6 +12,8 @@ import { Badge } from '@/components/ui/badge'
 import { usePageBuilderStore } from '@/store/page-builder-store'
 import { cn } from '@/lib/utils'
 import { SEOPanel } from './SEOPanel'
+import { useSession } from 'next-auth/react'
+import { canManageOperations, getUserRole } from '@/lib/auth/permissions'
 
 interface Props {
   onSave: () => void
@@ -19,6 +21,7 @@ interface Props {
 }
 
 export function BuilderToolbar({ onSave, onPublish }: Props) {
+  const { data: session } = useSession()
   const {
     page, isDirty, isSaving, isPreviewMode, device,
     setDevice, setPreviewMode, undo, redo, canUndo, canRedo,
@@ -26,6 +29,7 @@ export function BuilderToolbar({ onSave, onPublish }: Props) {
 
   const [seoPanelOpen, setSeoPanelOpen] = useState(false)
   const websiteUrl = process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://your-domain.com'
+  const canManage = canManageOperations(getUserRole(session?.user?.role))
 
   if (!page) return null
 
@@ -154,7 +158,7 @@ export function BuilderToolbar({ onSave, onPublish }: Props) {
             variant="outline"
             size="sm"
             onClick={onSave}
-            disabled={isSaving || !isDirty}
+            disabled={isSaving || !isDirty || !canManage}
           >
             {isSaving ? (
               <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving...</>
@@ -166,7 +170,7 @@ export function BuilderToolbar({ onSave, onPublish }: Props) {
           <Button
             size="sm"
             onClick={onPublish}
-            disabled={isSaving}
+            disabled={isSaving || !canManage}
             className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
           >
             <Rocket className="mr-2 h-4 w-4" />

@@ -15,10 +15,14 @@ import {
 import { PLATFORM_INFO, type Platform } from '@/lib/types/distribution'
 import { usePlatforms, useTogglePlatform } from '@/hooks/use-distribution'
 import { formatRelativeTime } from '@/lib/utils/seo-helpers'
+import { useSession } from 'next-auth/react'
+import { canManageOperations, getUserRole } from '@/lib/auth/permissions'
 
 export function PlatformSettings() {
+  const { data: session } = useSession()
   const { data, isLoading } = usePlatforms()
   const toggleMutation = useTogglePlatform()
+  const canManage = canManageOperations(getUserRole(session?.user?.role))
   
   if (isLoading) {
     return (
@@ -69,7 +73,7 @@ export function PlatformSettings() {
                       isEnabled: checked 
                     })
                   }
-                  disabled={toggleMutation.isPending}
+                  disabled={toggleMutation.isPending || !canManage}
                 />
               </div>
               

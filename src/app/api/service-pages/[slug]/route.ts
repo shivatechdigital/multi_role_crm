@@ -2,12 +2,19 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { servicePagesApi } from '@/lib/api/service-pages'
+import { auth } from '@/lib/auth/auth'
+import { canManageOperations, getUserRole } from '@/lib/auth/permissions'
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const session = await auth()
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const { slug } = await params
     const data = await servicePagesApi.get(slug)
     return NextResponse.json(data)
@@ -28,6 +35,15 @@ export async function PUT(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const session = await auth()
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    if (!canManageOperations(getUserRole(session.user.role))) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
     const { slug } = await params
     const body = await request.json()
     const data = await servicePagesApi.update(slug, body)
@@ -50,6 +66,15 @@ export async function DELETE(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const session = await auth()
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    if (!canManageOperations(getUserRole(session.user.role))) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
     const { slug } = await params
     const data = await servicePagesApi.delete(slug)
     return NextResponse.json(data)
