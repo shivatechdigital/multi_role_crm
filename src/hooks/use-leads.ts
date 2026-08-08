@@ -86,3 +86,12 @@ export function useAddActivity() {
     },
   })
 }
+
+export function useSendLeadActivitiesEmail() {
+  return useMutation({
+    mutationFn: async (leadId: string) => {
+      const response = await axios.post(`/api/leads/${leadId}/activities/email`)
+      return response.data
+    },
+  })
+}

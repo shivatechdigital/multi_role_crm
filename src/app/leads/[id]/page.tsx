@@ -2,7 +2,7 @@
 
 import { use, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useLead, useUpdateLead, useDeleteLead, useAddActivity } from '@/hooks/use-leads'
+import { useLead, useUpdateLead, useDeleteLead, useAddActivity, useSendLeadActivitiesEmail } from '@/hooks/use-leads'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -63,6 +63,7 @@ export default function LeadDetailPage({
   const updateLead = useUpdateLead()
   const deleteLead = useDeleteLead()
   const addActivity = useAddActivity()
+  const sendLeadActivitiesEmail = useSendLeadActivitiesEmail()
 
   const [activityNote, setActivityNote] = useState('')
   const [activityType, setActivityType] = useState('note')
@@ -145,6 +146,15 @@ export default function LeadDetailPage({
       router.push('/leads')
     } catch (error) {
       toast.error('Failed to delete lead')
+    }
+  }
+
+  const handleSendActivitiesEmail = async () => {
+    try {
+      const result = await sendLeadActivitiesEmail.mutateAsync(lead.id)
+      toast.success(result.message || 'Activity email sent successfully')
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || 'Failed to send activity email')
     }
   }
 
@@ -269,13 +279,27 @@ export default function LeadDetailPage({
           {/* Activity Timeline */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Activity className="w-5 h-5" />
-                Activity Timeline
-              </CardTitle>
-              <CardDescription>
-                {lead.activities?.length || 0} activities recorded
-              </CardDescription>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Activity className="w-5 h-5" />
+                    Activity Timeline
+                  </CardTitle>
+                  <CardDescription>
+                    {lead.activities?.length || 0} activities recorded
+                  </CardDescription>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSendActivitiesEmail}
+                  disabled={!lead.activities?.length || sendLeadActivitiesEmail.isPending}
+                >
+                  <Mail className="w-4 h-4 mr-2" />
+                  {sendLeadActivitiesEmail.isPending ? 'Sending...' : 'Send Email'}
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
               {!lead.activities || lead.activities.length === 0 ? (
