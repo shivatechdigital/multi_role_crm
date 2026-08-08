@@ -25,7 +25,7 @@ export function BuilderToolbar({ onSave, onPublish }: Props) {
   } = usePageBuilderStore()
 
   const [seoPanelOpen, setSeoPanelOpen] = useState(false)
-  const websiteUrl = process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://shivatechdigital.com'
+  const websiteUrl = process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://your-domain.com'
 
   if (!page) return null
 

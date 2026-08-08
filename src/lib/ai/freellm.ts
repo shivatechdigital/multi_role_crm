@@ -1,5 +1,5 @@
-const FREELLM_URL = process.env.FREELLM_API_URL || 'http://34.100.232.200:5173/v1/chat/completions'
-const FREELLM_KEY = process.env.FREELLM_API_KEY || 'freellmapi-73b96179a62017c62886a173d174016f8a81a7f6fb94414d'
+const FREELLM_URL = process.env.FREELLM_API_URL || 'http://localhost:5173/v1/chat/completions'
+const FREELLM_KEY = process.env.FREELLM_API_KEY || ''
 
 export type AIProvider = 'groq' | 'google' | 'openrouter' | 'huggingface'
 
@@ -41,12 +41,17 @@ class FreeLLMService {
     } = request
 
     try {
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      }
+
+      if (FREELLM_KEY) {
+        headers.Authorization = `Bearer ${FREELLM_KEY}`
+      }
+
       const response = await fetch(FREELLM_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${FREELLM_KEY}`,
-        },
+        headers,
         body: JSON.stringify({
           model,
           messages: [

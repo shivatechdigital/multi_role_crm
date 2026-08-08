@@ -54,7 +54,7 @@ export default function LeadsPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Leads 💼</h1>
           <p className="text-muted-foreground mt-1">
-            Manage and track all your business leads
+            Manage and track leads across your team
           </p>
         </div>
         <Link href="/leads/new">

@@ -1,12 +1,14 @@
 {
-  "name": "crm-frontend",
+  "name": "multi-role-crm",
   "version": "0.1.0",
+  "description": "Multi-user CRM for leads, analytics, SEO operations, and service page workflows.",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000 -H 0.0.0.0",
     "build": "next build",
     "start": "next start -p 3000 -H 0.0.0.0",
     "lint": "next lint",
+    "postinstall": "prisma generate",
     "db:studio": "prisma studio",
     "db:migrate": "prisma migrate dev",
     "db:generate": "prisma generate",

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db/prisma'
 
 const SYNC_SECRET = process.env.SYNC_SECRET || 'change-this-secret'
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://shivatechdigital.com'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
 export async function POST(request: Request) {
   try {

@@ -32,8 +32,8 @@ export default function LoginPage() {
               <Sparkles className="w-7 h-7 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold">ShivaTech CRM</h1>
-              <p className="text-sm text-muted-foreground">AI-Powered Platform</p>
+              <h1 className="text-2xl font-bold">Multi-Role CRM</h1>
+              <p className="text-sm text-muted-foreground">Multi-user growth platform</p>
             </div>
           </div>
 
@@ -41,13 +41,13 @@ export default function LoginPage() {
           <h2 className="text-4xl xl:text-5xl font-bold mb-6 leading-tight">
             Your Complete{' '}
             <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              SEO & Business
+              Sales, SEO & Ops
             </span>{' '}
             Intelligence Platform
           </h2>
           
           <p className="text-lg text-muted-foreground mb-12">
-            Track 100+ metrics, get AI-powered insights, and grow your business with data-driven decisions.
+            Track performance, manage leads, and coordinate your team with data-driven workflows.
           </p>
 
           {/* Features Grid */}
@@ -100,7 +100,7 @@ export default function LoginPage() {
             <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
               <Sparkles className="w-6 h-6 text-primary-foreground" />
             </div>
-            <h1 className="text-xl font-bold">ShivaTech CRM</h1>
+            <h1 className="text-xl font-bold">Multi-Role CRM</h1>
           </div>
 
           <Card className="border-0 shadow-xl">
@@ -177,7 +177,7 @@ export default function LoginPage() {
 
           {/* Footer */}
           <p className="text-center text-sm text-muted-foreground mt-8">
-            © 2024 ShivaTech Digital. All rights reserved.
+            © 2024 Multi-Role CRM. All rights reserved.
           </p>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { google } from 'googleapis'
 import { getGoogleAuth } from './auth'
 
-const GSC_PROPERTY = process.env.GSC_PROPERTY || 'sc-domain:shivatechdigital.com'
+const GSC_PROPERTY = process.env.GSC_PROPERTY || 'sc-domain:example.com'
 
 export interface GSCMetrics {
   clicks: number

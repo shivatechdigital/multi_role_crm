@@ -116,7 +116,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
             <Sparkles className="h-5 w-5" />
           </div>
           <div>
-            <h1 className="font-bold text-gray-900 dark:text-white">ShivaTech</h1>
+            <h1 className="font-bold text-gray-900 dark:text-white">Multi-Role</h1>
             <p className="text-xs text-gray-500 dark:text-gray-400">CRM Platform</p>
           </div>
         </div>
@@ -172,7 +172,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         {/* Footer */}
         <div className="border-t p-4 dark:border-gray-800">
           <div className="text-xs text-gray-500 dark:text-gray-400">
-            <p className="font-medium">ShivaTech CRM</p>
+              <p className="font-medium">Multi-Role CRM</p>
             <p>v1.0.0 • Beta</p>
           </div>
         </div>

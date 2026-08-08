@@ -1,5 +1,5 @@
 const PAGESPEED_API = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed'
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://shivatechdigital.com'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
 export interface PageSpeedMetrics {
   performance: number

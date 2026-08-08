@@ -154,7 +154,7 @@ export function SEOPanel({ open, onOpenChange }: Props) {
                   {metaTitle || 'Your page title'}
                 </p>
                 <p className="text-xs text-green-700 mt-0.5">
-                  {process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://shivatechdigital.com'}/services/{page.slug}
+                  {process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://your-domain.com'}/services/{page.slug}
                 </p>
                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
                   {metaDescription || 'Your meta description will appear here...'}

@@ -1,12 +1,12 @@
-# ShivaTech CRM
+# Multi-Role CRM
 
-An internal CRM and growth operations platform built for lead management, SEO monitoring, analytics reporting, website health tracking, and service-page publishing.
+A multi-user CRM and growth operations platform built for lead management, SEO monitoring, analytics reporting, website health tracking, and service-page publishing.
 
-It combines a protected dashboard, Google-powered data sync, Prisma/PostgreSQL persistence, and a visual content workflow in one Next.js application.
+It combines a role-aware dashboard, Google-powered data sync, Prisma/PostgreSQL persistence, and a visual content workflow in one Next.js application.
 
 ## Why This Exists
 
-ShivaTech CRM is designed to give one place to manage:
+Multi-Role CRM is designed to give one place to manage:
 
 - inbound leads and their lifecycle
 - organic search performance and keyword movement
@@ -80,7 +80,7 @@ npm install
 
 ### 2. Configure environment
 
-Create a local `.env` file with the values your environment needs.
+Copy `.env.example` to `.env` and replace the placeholder values with your environment-specific credentials and URLs.
 
 Required or commonly used variables found in the codebase:
 
@@ -191,4 +191,4 @@ For production deployment, make sure you validate:
 
 ## Status
 
-This repository is no longer a generic Next.js starter. It is a working CRM and operations console tailored to ShivaTech's lead, SEO, analytics, and content workflows.
+This repository is positioned as the next evolution of the CRM: a multi-user operations console for leads, SEO, analytics, health monitoring, and service-page workflows.

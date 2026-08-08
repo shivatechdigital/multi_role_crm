@@ -310,7 +310,7 @@ export default function EditPagePage({ params }: PageProps) {
         {/* Preview Tab */}
         <TabsContent value="preview" className="space-y-4 mt-0">
           <PreviewPane
-            url={page.page_url || `https://shivatechdigital.com/${page.page_slug}`}
+            url={page.page_url || `https://your-domain.com/${page.page_slug}`}
             title={metaData.meta_title}
             description={metaData.meta_description}
             ogImage={metaData.og_image}

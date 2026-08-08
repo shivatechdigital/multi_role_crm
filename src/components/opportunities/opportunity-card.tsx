@@ -130,7 +130,7 @@ export function OpportunityCard({ opportunity }: OpportunityCardProps) {
               asChild
             >
               <a 
-                href={opportunity.page.startsWith('http') ? opportunity.page : `https://shivatechdigital.com${opportunity.page}`}
+                href={opportunity.page.startsWith('http') ? opportunity.page : `https://your-domain.com${opportunity.page}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

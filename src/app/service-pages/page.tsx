@@ -102,7 +102,7 @@ export default function ServicePagesListPage() {
     }
   }
 
-  const websiteUrl = process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://shivatechdigital.com'
+  const websiteUrl = process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://your-domain.com'
 
   return (
     <div className="p-4 sm:p-6">

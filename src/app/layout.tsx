@@ -10,8 +10,8 @@ import { auth } from '@/lib/auth/auth'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'ShivaTech CRM',
-  description: 'AI-Powered SEO & CRM Platform',
+  title: 'Multi-Role CRM',
+  description: 'Multi-user CRM for leads, analytics, SEO operations, and content workflows.',
 }
 
 export default async function RootLayout({

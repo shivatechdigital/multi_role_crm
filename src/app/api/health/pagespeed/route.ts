@@ -35,7 +35,7 @@ export async function GET(request: Request) {
     if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const { searchParams } = new URL(request.url)
-    const url = searchParams.get('url') || process.env.NEXT_PUBLIC_SITE_URL || 'https://shivatechdigital.com'
+    const url = searchParams.get('url') || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
     const [mobile, desktop] = await Promise.all([
       runPageSpeed(url, 'mobile'),

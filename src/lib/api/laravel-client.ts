@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios'
 
-const LARAVEL_API_URL = process.env.LARAVEL_API_URL || 'https://shivatechdigital.com'
+const LARAVEL_API_URL = process.env.LARAVEL_API_URL || 'http://localhost:8000'
 const LARAVEL_API_TOKEN = process.env.LARAVEL_API_TOKEN || ''
 
 class LaravelClient {
