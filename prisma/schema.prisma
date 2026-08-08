@@ -1,0 +1,426 @@
+generator client {
+  provider = "prisma-client-js"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  image         String?
+  role          UserRole  @default(USER)
+  emailVerified DateTime?
+  accounts      Account[]
+  sessions      Session[]
+  leads         Lead[]
+  activities    LeadActivity[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  @@index([email])
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  USER
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SeoMetricsDaily {
+  id           String   @id @default(cuid())
+  date         DateTime @unique @db.Date
+  clicks       Int      @default(0)
+  impressions  Int      @default(0)
+  ctr          Float    @default(0)
+  position     Float    @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  @@index([date])
+}
+
+model KeywordRanking {
+  id          String   @id @default(cuid())
+  date        DateTime @db.Date
+  keyword     String
+  position    Float
+  clicks      Int      @default(0)
+  impressions Int      @default(0)
+  ctr         Float    @default(0)
+  pageUrl     String?
+  country     String?
+  device      String?
+  createdAt   DateTime @default(now())
+  @@unique([date, keyword, pageUrl])
+  @@index([keyword])
+  @@index([date])
+}
+
+model PagePerformance {
+  id          String   @id @default(cuid())
+  date        DateTime @db.Date
+  pageUrl     String
+  clicks      Int      @default(0)
+  impressions Int      @default(0)
+  ctr         Float    @default(0)
+  position    Float    @default(0)
+  createdAt   DateTime @default(now())
+  @@unique([date, pageUrl])
+  @@index([pageUrl])
+  @@index([date])
+}
+
+model AnalyticsDaily {
+  id                 String   @id @default(cuid())
+  date               DateTime @unique @db.Date
+  users              Int      @default(0)
+  newUsers           Int      @default(0)
+  sessions           Int      @default(0)
+  pageviews          Int      @default(0)
+  bounceRate         Float    @default(0)
+  avgSessionDuration Float    @default(0)
+  pagesPerSession    Float    @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  @@index([date])
+}
+
+model TrafficSource {
+  id         String   @id @default(cuid())
+  date       DateTime @db.Date
+  source     String
+  medium     String?
+  users      Int      @default(0)
+  sessions   Int      @default(0)
+  bounceRate Float    @default(0)
+  createdAt  DateTime @default(now())
+  @@unique([date, source, medium])
+  @@index([date])
+  @@index([source])
+}
+
+model PageAnalytics {
+  id            String   @id @default(cuid())
+  date          DateTime @db.Date
+  pageUrl       String
+  pageTitle     String?
+  users         Int      @default(0)
+  pageviews     Int      @default(0)
+  avgTimeOnPage Float    @default(0)
+  bounceRate    Float    @default(0)
+  exits         Int      @default(0)
+  createdAt     DateTime @default(now())
+  @@unique([date, pageUrl])
+  @@index([pageUrl])
+}
+
+model UserDemographics {
+  id        String   @id @default(cuid())
+  date      DateTime @db.Date
+  country   String?
+  city      String?
+  device    String?
+  browser   String?
+  os        String?
+  users     Int      @default(0)
+  sessions  Int      @default(0)
+  createdAt DateTime @default(now())
+  @@index([date])
+  @@index([country])
+}
+
+model UptimeCheck {
+  id           String   @id @default(cuid())
+  timestamp    DateTime @default(now())
+  status       String
+  responseTime Int?
+  statusCode   Int?
+  error        String?
+  @@index([timestamp])
+  @@index([status])
+}
+
+model PageSpeedMetrics {
+  id                 String   @id @default(cuid())
+  date               DateTime @db.Date
+  url                String
+  strategy           String
+  performanceScore   Int      @default(0)
+  seoScore           Int      @default(0)
+  accessibilityScore Int      @default(0)
+  bestPracticesScore Int      @default(0)
+  fcp                Float?
+  lcp                Float?
+  cls                Float?
+  tbt                Float?
+  si                 Float?
+  tti                Float?
+  createdAt          DateTime @default(now())
+  @@unique([date, url, strategy])
+  @@index([date])
+  @@index([url])
+}
+
+model TechnicalIssue {
+  id          String    @id @default(cuid())
+  type        String
+  severity    String
+  url         String
+  description String    @db.Text
+  status      String    @default("open")
+  detectedAt  DateTime  @default(now())
+  resolvedAt  DateTime?
+  @@index([status])
+  @@index([type])
+}
+
+model Lead {
+  id          String     @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  company     String?
+  source      String
+  service     String?
+  budget      String?
+  message     String?    @db.Text
+  status      LeadStatus @default(NEW)
+  score       Int        @default(0)
+  assignedTo  String?
+  user        User?      @relation(fields: [assignedTo], references: [id])
+  activities  LeadActivity[]
+  ipAddress   String?
+  userAgent   String?
+  referrer    String?
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  @@index([status])
+  @@index([source])
+  @@index([createdAt])
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  PROPOSAL_SENT
+  NEGOTIATION
+  WON
+  LOST
+  ON_HOLD
+}
+
+model LeadActivity {
+  id          String   @id @default(cuid())
+  leadId      String
+  lead        Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  type        String
+  description String   @db.Text
+  metadata    Json?
+  createdAt   DateTime @default(now())
+  @@index([leadId])
+}
+
+model AiInsight {
+  id          String   @id @default(cuid())
+  date        DateTime @db.Date
+  type        String
+  category    String
+  title       String
+  description String   @db.Text
+  priority    String
+  data        Json?
+  actions     Json?
+  status      String   @default("new")
+  createdAt   DateTime @default(now())
+  @@index([date])
+  @@index([type])
+  @@index([status])
+}
+
+model Alert {
+  id         String    @id @default(cuid())
+  type       String
+  severity   String
+  title      String
+  message    String    @db.Text
+  data       Json?
+  isRead     Boolean   @default(false)
+  isResolved Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  resolvedAt DateTime?
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  channel   String
+  recipient String
+  subject   String?
+  message   String   @db.Text
+  status    String
+  error     String?
+  sentAt    DateTime @default(now())
+  @@index([channel])
+  @@index([status])
+}
+
+model Report {
+  id          String   @id @default(cuid())
+  type        String
+  title       String
+  dateFrom    DateTime
+  dateTo      DateTime
+  data        Json
+  pdfUrl      String?
+  generatedBy String?
+  emailedTo   String?
+  createdAt   DateTime @default(now())
+  @@index([type])
+  @@index([createdAt])
+}
+
+model Setting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value Json
+  updatedAt DateTime @updatedAt
+  @@index([key])
+}
+
+model ApiLog {
+  id         String   @id @default(cuid())
+  endpoint   String
+  method     String
+  source     String
+  payload    Json?
+  response   Json?
+  statusCode Int?
+  duration   Int?
+  createdAt  DateTime @default(now())
+  @@index([endpoint])
+  @@index([createdAt])
+}
+
+// ============================================
+// BLOG DISTRIBUTION TRACKING
+// ============================================
+
+model BlogDistribution {
+  id              String    @id @default(cuid())
+  
+  // Source blog details
+  blogId          String?   // ID from Laravel blog_posts table
+  blogTitle       String
+  blogSlug        String
+  blogUrl         String    // Full URL of original blog
+  blogExcerpt     String?   @db.Text
+  blogContent     String?   @db.Text
+  blogImage       String?   // Featured image URL
+  blogCategory    String?
+  blogTags        String[]  @default([])
+  
+  // Distribution status
+  status          String    @default("pending") // pending, processing, completed, failed, partial
+  totalPlatforms  Int       @default(0)
+  successCount    Int       @default(0)
+  failureCount    Int       @default(0)
+  
+  // Tracking
+  triggeredAt     DateTime  @default(now())
+  completedAt     DateTime?
+  
+  // Relations
+  posts           PlatformPost[]
+  
+  @@index([blogId])
+  @@index([status])
+  @@index([triggeredAt])
+}
+
+model PlatformPost {
+  id              String    @id @default(cuid())
+  distributionId  String
+  distribution    BlogDistribution @relation(fields: [distributionId], references: [id], onDelete: Cascade)
+  
+  // Platform info
+  platform        String    // linkedin, medium, devto, hashnode, facebook, instagram, twitter, gbp
+  platformPostId  String?   // ID returned by platform
+  platformUrl     String?   // URL of the post on platform
+  
+  // Status
+  status          String    @default("pending") // pending, processing, success, failed
+  errorMessage    String?   @db.Text
+  
+  // Engagement (updated later)
+  views           Int       @default(0)
+  likes           Int       @default(0)
+  comments        Int       @default(0)
+  shares          Int       @default(0)
+  
+  // Tracking
+  postedAt        DateTime?
+  lastSyncedAt    DateTime?
+  createdAt       DateTime  @default(now())
+  
+  @@index([platform])
+  @@index([status])
+  @@index([distributionId])
+}
+
+model PlatformConfig {
+  id              String    @id @default(cuid())
+  platform        String    @unique // linkedin, medium, etc.
+  isEnabled       Boolean   @default(true)
+  
+  // Credentials (encrypted in production)
+  credentials     Json?     // {accessToken, pageId, etc.}
+  
+  // Settings
+  postDelay       Int       @default(60) // seconds delay before posting
+  customTemplate  String?   @db.Text // Optional template override
+  
+  // Stats
+  totalPosts      Int       @default(0)
+  successfulPosts Int       @default(0)
+  failedPosts     Int       @default(0)
+  
+  // Tracking
+  lastUsedAt      DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}

@@ -1,0 +1,124 @@
+═══════════════════════════════════════════════════
+   CRM PROJECT ANALYSIS REPORT
+═══════════════════════════════════════════════════
+
+Generated: 2026-07-16T23:13:50.201Z
+
+📦 PROJECT INFO
+─────────────────
+Name: crm-frontend
+Version: 0.1.0
+
+🛠️ BUILD TOOL
+─────────────────
+Next.js 15.5.19
+
+⚛️ REACT VERSION
+─────────────────
+19
+
+🎨 STYLING
+─────────────────
+tailwindcss: ^4
+
+🗄️ BACKEND
+─────────────────
+No backend detected in main package.json
+
+💾 DATABASE
+─────────────────
+@prisma/client: 5.22.0
+
+🔐 AUTHENTICATION
+─────────────────
+next-auth: 5.0.0-beta.31
+
+🧭 ROUTING
+─────────────────
+Next.js Routing 
+
+📊 STATE MANAGEMENT
+─────────────────
+zustand: ^5.0.14
+
+📁 SOURCE CODE STATS
+─────────────────
+Total files: 155
+Components: 55
+Pages: 44
+Hooks: 10
+Services/APIs: 36
+Utils: 4
+
+Detected API endpoints (27):
+  - /api/alerts
+  - /api/alerts/${id}
+  - /api/reports/generate
+  - /api/analytics/users?days=${days}
+  - /api/analytics/sources?days=${days}
+  - /api/analytics/realtime
+  - /api/seo/overview?days=${days}
+  - /api/analytics/overview?days=${days}
+  - /api/distribution/list?${params}
+  - /api/distribution/platforms
+  - /api/health/overview
+  - /api/health/pagespeed${params}
+  - /api/health/uptime
+  - /api/insights${params}
+  - /api/insights/generate
+  - /api/insights/${id}
+  - /api/leads?${params.toString()}
+  - /api/leads/${id}
+  - /api/leads
+  - /api/leads/${leadId}/activities
+
+Detected routes (0):
+
+🔧 CONFIG FILES
+─────────────────
+✓ .env
+✓ .env.local
+✓ tsconfig.json
+
+🌍 ENVIRONMENT VARIABLES (names only)
+─────────────────
+DATABASE_URL
+NEXTAUTH_URL
+NEXTAUTH_URL_INTERNAL
+AUTH_URL
+AUTH_TRUST_HOST
+NEXTAUTH_SECRET
+GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET
+GA4_PROPERTY_ID
+GSC_PROPERTY
+GOOGLE_SERVICE_ACCOUNT_PATH
+GOOGLE_SERVICE_ACCOUNT_EMAIL
+REDIS_URL
+N8N_URL
+N8N_WEBHOOK_URL
+EVOLUTION_API_URL
+EVOLUTION_API_KEY
+FREELLM_API_URL
+FREELLM_API_KEY
+TELEGRAM_BOT_TOKEN
+TELEGRAM_CHAT_ID
+SMTP_HOST
+SMTP_PORT
+SMTP_USER
+SMTP_PASS
+SMTP_FROM
+NODE_ENV
+APP_URL
+APP_NAME
+GOOGLE_API_KEY
+SYNC_SECRET
+LARAVEL_API_URL
+LARAVEL_API_TOKEN
+NEXT_PUBLIC_WEBSITE_URL
+
+💡 RECOMMENDATIONS
+─────────────────
+• Install TipTap for rich text editing: npm install @tiptap/react @tiptap/starter-kit
+• Install @dnd-kit/core for drag-and-drop builder: npm install @dnd-kit/core @dnd-kit/sortable
+• Install DOMPurify for HTML sanitization: npm install dompurify

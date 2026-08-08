@@ -1,0 +1,504 @@
+{
+  "timestamp": "2026-07-16T23:13:50.201Z",
+  "projectInfo": {
+    "name": "crm-frontend",
+    "version": "0.1.0",
+    "scripts": {
+      "dev": "next dev -p 3000 -H 0.0.0.0",
+      "build": "next build",
+      "start": "next start -p 3000 -H 0.0.0.0",
+      "lint": "next lint",
+      "db:studio": "prisma studio",
+      "db:migrate": "prisma migrate dev",
+      "db:generate": "prisma generate",
+      "db:test": "tsx scripts/test-db.ts"
+    }
+  },
+  "dependencies": {
+    "@auth/prisma-adapter": "^2.11.2",
+    "@google-analytics/data": "^6.1.0",
+    "@hookform/resolvers": "^5.4.0",
+    "@prisma/client": "5.22.0",
+    "@react-pdf/renderer": "^4.5.1",
+    "@tanstack/react-query": "^5.101.0",
+    "@tanstack/react-query-devtools": "^5.101.0",
+    "@tanstack/react-table": "^8.21.3",
+    "axios": "^1.18.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.4.0",
+    "google-auth-library": "^10.7.0",
+    "googleapis": "^173.0.0",
+    "lucide-react": "^1.21.0",
+    "next": "15.5.19",
+    "next-auth": "5.0.0-beta.31",
+    "next-themes": "^0.4.6",
+    "radix-ui": "^1.6.0",
+    "react": "19",
+    "react-day-picker": "^10.0.1",
+    "react-dom": "19",
+    "react-hook-form": "^7.79.0",
+    "react-markdown": "^10.1.0",
+    "recharts": "^3.8.0",
+    "shadcn": "^4.11.0",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.6.0",
+    "tw-animate-css": "^1.4.0",
+    "zod": "^4.4.3",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.9",
+    "prisma": "5.22.0",
+    "tailwindcss": "^4",
+    "tsx": "^4.22.4",
+    "typescript": "^5"
+  },
+  "folderStructure": {
+    "AGENTS.md": "0.32 KB",
+    "CLAUDE.md": "0.01 KB",
+    "README.md": "1.42 KB",
+    "analyze-project.js": "17.28 KB",
+    "components/": {
+      "auth/": "(empty or deep)",
+      "charts/": "(empty or deep)",
+      "dashboard/": "(empty or deep)",
+      "layout/": "(empty or deep)",
+      "shared/": "(empty or deep)",
+      "ui/": {
+        "button.tsx": "3.31 KB"
+      }
+    },
+    "components.json": "0.42 KB",
+    "hooks/": "(empty or deep)",
+    "lib/": {
+      "api/": "(empty or deep)",
+      "auth/": "(empty or deep)",
+      "db/": "(empty or deep)",
+      "utils/": "(empty or deep)",
+      "utils.ts": "0.16 KB"
+    },
+    "next-env.d.ts": "0.26 KB",
+    "next.config.ts": "0.15 KB",
+    "package.json": "1.63 KB",
+    "prisma/": {
+      "migrations/": {
+        "20260618204256_initial_setup/": "(empty or deep)",
+        "20260621193137_add_blog_distribution/": "(empty or deep)"
+      },
+      "seeds/": {
+        "platforms.ts": "1.19 KB"
+      }
+    },
+    "prisma.config.ts": "0.37 KB",
+    "public/": "(empty or deep)",
+    "scripts/": {
+      "test-db.ts": "1.15 KB"
+    },
+    "src/": {
+      "app/": {
+        "alerts/": {
+          "layout.tsx": "0.35 KB",
+          "page.tsx": "6.65 KB"
+        },
+        "analytics/": {
+          "layout.tsx": "0.35 KB",
+          "page.tsx": "11.32 KB",
+          "sources/": {
+            "page.tsx": "8.17 KB"
+          },
+          "users/": {
+            "page.tsx": "7.80 KB"
+          }
+        },
+        "api/": {
+          "alerts/": {
+            "[id]/": "(empty or deep)",
+            "route.ts": "1.54 KB"
+          },
+          "analytics/": {
+            "overview/": "(empty or deep)",
+            "realtime/": "(empty or deep)",
+            "sources/": "(empty or deep)",
+            "users/": "(empty or deep)"
+          },
+          "auth/": {
+            "[...nextauth]/": "(empty or deep)"
+          },
+          "distribution/": {
+            "list/": "(empty or deep)",
+            "platforms/": "(empty or deep)",
+            "trigger/": "(empty or deep)",
+            "update/": "(empty or deep)"
+          },
+          "gbp/": {
+            "locations/": "(empty or deep)"
+          },
+          "health/": {
+            "overview/": "(empty or deep)",
+            "pagespeed/": "(empty or deep)",
+            "uptime/": "(empty or deep)"
+          },
+          "insights/": {
+            "[id]/": "(empty or deep)",
+            "generate/": "(empty or deep)",
+            "route.ts": "1.18 KB"
+          },
+          "leads/": {
+            "[id]/": "(empty or deep)",
+            "route.ts": "3.74 KB"
+          },
+          "reports/": {
+            "generate/": "(empty or deep)"
+          },
+          "seo/": {
+            "keywords/": "(empty or deep)",
+            "opportunities/": "(empty or deep)",
+            "overview/": "(empty or deep)",
+            "pages/": "(empty or deep)",
+            "seo/": "(empty or deep)"
+          },
+          "seo-pages/": {
+            "[...slug]/": "(empty or deep)",
+            "route.ts": "0.52 KB",
+            "stats/": "(empty or deep)"
+          },
+          "sync/": {
+            "ga4/": "(empty or deep)",
+            "gsc/": "(empty or deep)",
+            "insights/": "(empty or deep)",
+            "uptime/": "(empty or deep)"
+          },
+          "webhooks/": {
+            "lead/": "(empty or deep)"
+          }
+        },
+        "auth/": {
+          "error/": {
+            "page.tsx": "1.77 KB"
+          },
+          "login/": {
+            "page.tsx": "8.63 KB"
+          }
+        },
+        "dashboard/": {
+          "layout.tsx": "0.37 KB",
+          "page.tsx": "9.46 KB",
+          "realtime/": {
+            "page.tsx": "9.82 KB"
+          }
+        },
+        "health/": {
+          "layout.tsx": "0.35 KB",
+          "page.tsx": "15.10 KB",
+          "pagespeed/": {
+            "page.tsx": "12.63 KB"
+          },
+          "uptime/": {
+            "page.tsx": "9.64 KB"
+          }
+        },
+        "insights/": {
+          "layout.tsx": "0.35 KB",
+          "page.tsx": "12.26 KB"
+        },
+        "layout.tsx": "1.15 KB",
+        "leads/": {
+          "[id]/": {
+            "page.tsx": "14.79 KB"
+          },
+          "layout.tsx": "0.35 KB",
+          "new/": {
+            "page.tsx": "8.14 KB"
+          },
+          "page.tsx": "8.29 KB"
+        },
+        "page.tsx": "0.25 KB",
+        "reports/": {
+          "layout.tsx": "0.35 KB",
+          "page.tsx": "2.38 KB"
+        },
+        "seo/": {
+          "distribution/": {
+            "page.tsx": "7.84 KB"
+          },
+          "keywords/": {
+            "page.tsx": "4.88 KB"
+          },
+          "layout.tsx": "0.36 KB",
+          "opportunities/": {
+            "page.tsx": "6.88 KB"
+          },
+          "page.tsx": "9.88 KB",
+          "pages/": {
+            "edit/": "(empty or deep)",
+            "page.tsx": "10.86 KB",
+            "pageback.tsx": "10.37 KB"
+          }
+        },
+        "settings/": {
+          "automation/": {
+            "page.tsx": "6.87 KB"
+          },
+          "layout.tsx": "0.35 KB",
+          "page.tsx": "14.61 KB"
+        }
+      },
+      "components/": {
+        "auth/": {
+          "session-provider.tsx": "0.28 KB"
+        },
+        "charts/": "(empty or deep)",
+        "dashboard/": {
+          "charts/": {
+            "devices-chart.tsx": "3.76 KB",
+            "keywords-chart.tsx": "4.57 KB",
+            "seo-chart.tsx": "2.87 KB",
+            "sources-chart.tsx": "2.82 KB",
+            "traffic-chart.tsx": "3.65 KB"
+          },
+          "data-table/": {
+            "data-table.tsx": "6.89 KB",
+            "keywords-columns.tsx": "2.75 KB",
+            "pages-columns.tsx": "2.10 KB"
+          },
+          "date-range-picker.tsx": "1.05 KB",
+          "stats-card.tsx": "2.69 KB"
+        },
+        "distribution/": {
+          "distribution-card.tsx": "6.35 KB",
+          "platform-settings.tsx": "4.94 KB"
+        },
+        "health/": {
+          "score-card.tsx": "2.23 KB"
+        },
+        "layout/": {
+          "app-layout.tsx": "0.39 KB",
+          "sidebar.tsx": "3.87 KB",
+          "topbar.tsx": "4.63 KB"
+        },
+        "leads/": {
+          "score-badge.tsx": "0.73 KB",
+          "status-badge.tsx": "1.16 KB"
+        },
+        "opportunities/": {
+          "opportunity-card.tsx": "7.87 KB"
+        },
+        "query-provider.tsx": "0.67 KB",
+        "seo-pages/": {
+          "editor/": {
+            "faq-editor.tsx": "8.23 KB",
+            "meta-editor.tsx": "9.71 KB",
+            "preview-pane.tsx": "4.76 KB",
+            "schema-editor.tsx": "6.40 KB",
+            "seo-score-badge.tsx": "1.30 KB"
+          },
+          "page-card.tsx": "7.08 KB",
+          "pages-filters.tsx": "4.45 KB",
+          "pages-stats.tsx": "2.81 KB"
+        },
+        "shared/": "(empty or deep)",
+        "theme-provider.tsx": "0.31 KB",
+        "ui/": {
+          "alert-dialog.tsx": "5.31 KB",
+          "alert.tsx": "1.58 KB",
+          "avatar.tsx": "2.85 KB",
+          "badge.tsx": "1.73 KB",
+          "button.tsx": "2.34 KB",
+          "calendar.tsx": "7.61 KB",
+          "card.tsx": "1.94 KB",
+          "chart.tsx": "10.31 KB",
+          "dialog.tsx": "4.20 KB",
+          "dropdown-menu.tsx": "8.22 KB",
+          "form.tsx": "3.67 KB",
+          "input.tsx": "0.94 KB",
+          "label.tsx": "0.59 KB",
+          "popover.tsx": "2.30 KB",
+          "progress.tsx": "0.72 KB",
+          "scroll-area.tsx": "1.60 KB",
+          "select.tsx": "6.20 KB",
+          "separator.tsx": "0.68 KB",
+          "sheet.tsx": "4.09 KB",
+          "skeleton.tsx": "0.27 KB",
+          "sonner.tsx": "1.01 KB",
+          "switch.tsx": "1.38 KB",
+          "table.tsx": "2.42 KB",
+          "tabs.tsx": "3.69 KB",
+          "textarea.tsx": "0.74 KB"
+        }
+      },
+      "hooks/": {
+        "use-analytics-data.ts": "1.14 KB",
+        "use-dashboard-data.ts": "0.86 KB",
+        "use-distribution.ts": "2.68 KB",
+        "use-health-data.ts": "1.22 KB",
+        "use-insights.ts": "1.47 KB",
+        "use-leads.ts": "2.37 KB",
+        "use-opportunities.ts": "0.64 KB",
+        "use-seo-data.ts": "0.89 KB",
+        "use-seo-pages.ts": "2.34 KB"
+      },
+      "lib/": {
+        "ai/": {
+          "freellm.ts": "7.22 KB"
+        },
+        "api/": {
+          "laravel-client.ts": "1.19 KB",
+          "seo-pages.ts": "1.91 KB"
+        },
+        "auth/": {
+          "auth-helpers.ts": "0.46 KB",
+          "auth.ts": "2.75 KB"
+        },
+        "db/": {
+          "prisma.ts": "0.37 KB"
+        },
+        "google/": {
+          "analytics.ts": "6.64 KB",
+          "auth.ts": "0.46 KB",
+          "business-profile.ts": "1.16 KB",
+          "pagespeed.ts": "4.05 KB",
+          "search-console.ts": "5.09 KB"
+        },
+        "types/": {
+          "distribution.ts": "1.89 KB",
+          "opportunities.ts": "0.98 KB",
+          "seo-pages.ts": "2.73 KB"
+        },
+        "utils/": {
+          "dates.ts": "0.34 KB",
+          "seo-helpers.ts": "4.05 KB"
+        },
+        "utils.ts": "0.16 KB"
+      },
+      "middleware.ts": "0.96 KB",
+      "proxy.ts": "1.38 KB",
+      "store/": {
+        "date-range-store.ts": "0.66 KB"
+      },
+      "types/": {
+        "next-auth.d.ts": "0.18 KB"
+      }
+    },
+    "store/": "(empty or deep)",
+    "tsconfig.json": "0.68 KB",
+    "types/": "(empty or deep)"
+  },
+  "configFiles": {
+    ".env": "exists",
+    ".env.local": "exists",
+    "tsconfig.json": "exists"
+  },
+  "environmentVariables": [
+    "DATABASE_URL",
+    "NEXTAUTH_URL",
+    "NEXTAUTH_URL_INTERNAL",
+    "AUTH_URL",
+    "AUTH_TRUST_HOST",
+    "NEXTAUTH_SECRET",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "GA4_PROPERTY_ID",
+    "GSC_PROPERTY",
+    "GOOGLE_SERVICE_ACCOUNT_PATH",
+    "GOOGLE_SERVICE_ACCOUNT_EMAIL",
+    "REDIS_URL",
+    "N8N_URL",
+    "N8N_WEBHOOK_URL",
+    "EVOLUTION_API_URL",
+    "EVOLUTION_API_KEY",
+    "FREELLM_API_URL",
+    "FREELLM_API_KEY",
+    "TELEGRAM_BOT_TOKEN",
+    "TELEGRAM_CHAT_ID",
+    "SMTP_HOST",
+    "SMTP_PORT",
+    "SMTP_USER",
+    "SMTP_PASS",
+    "SMTP_FROM",
+    "NODE_ENV",
+    "APP_URL",
+    "APP_NAME",
+    "GOOGLE_API_KEY",
+    "SYNC_SECRET",
+    "LARAVEL_API_URL",
+    "LARAVEL_API_TOKEN",
+    "NEXT_PUBLIC_WEBSITE_URL"
+  ],
+  "detectedFeatures": {
+    "react": "19",
+    "httpClient": "axios",
+    "dataFetching": "React Query",
+    "forms": "React Hook Form",
+    "icons": "lucide-react"
+  },
+  "backendInfo": {},
+  "databaseInfo": {
+    "@prisma/client": "5.22.0"
+  },
+  "authenticationInfo": {
+    "next-auth": "5.0.0-beta.31"
+  },
+  "routingInfo": {
+    "library": "Next.js Routing"
+  },
+  "stateManagement": {
+    "zustand": "^5.0.14"
+  },
+  "stylingInfo": {
+    "tailwindcss": "^4"
+  },
+  "buildTool": {
+    "name": "Next.js",
+    "version": "15.5.19"
+  },
+  "recommendations": [
+    "Install TipTap for rich text editing: npm install @tiptap/react @tiptap/starter-kit",
+    "Install @dnd-kit/core for drag-and-drop builder: npm install @dnd-kit/core @dnd-kit/sortable",
+    "Install DOMPurify for HTML sanitization: npm install dompurify"
+  ],
+  "sourceCodeStats": {
+    "totalFiles": 155,
+    "components": 55,
+    "pages": 44,
+    "hooks": 10,
+    "contexts": 0,
+    "services": 36,
+    "utils": 4,
+    "apiCalls": [
+      "/api/alerts",
+      "/api/alerts/${id}",
+      "/api/reports/generate",
+      "/api/analytics/users?days=${days}",
+      "/api/analytics/sources?days=${days}",
+      "/api/analytics/realtime",
+      "/api/seo/overview?days=${days}",
+      "/api/analytics/overview?days=${days}",
+      "/api/distribution/list?${params}",
+      "/api/distribution/platforms",
+      "/api/health/overview",
+      "/api/health/pagespeed${params}",
+      "/api/health/uptime",
+      "/api/insights${params}",
+      "/api/insights/generate",
+      "/api/insights/${id}",
+      "/api/leads?${params.toString()}",
+      "/api/leads/${id}",
+      "/api/leads",
+      "/api/leads/${leadId}/activities",
+      "/api/seo/opportunities?days=${days}",
+      "/api/seo/keywords?days=${days}&limit=${limit}",
+      "/api/seo/pages?days=${days}&limit=${limit}",
+      "/api/seo-pages",
+      "/api/seo-pages/${slug}",
+      "/api/seo-pages/stats",
+      "/api/auth"
+    ],
+    "routes": []
+  }
+}
