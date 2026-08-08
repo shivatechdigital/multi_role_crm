@@ -103,6 +103,23 @@ export async function POST(request: Request) {
       )
     }
 
+    if (invite.role !== 'ADMIN') {
+      const currentUser = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { role: true },
+      })
+
+      if (currentUser?.role === 'ADMIN') {
+        const adminCount = await prisma.user.count({ where: { role: 'ADMIN' } })
+        if (adminCount <= 1) {
+          return NextResponse.json(
+            { error: 'At least one admin must remain assigned' },
+            { status: 400 }
+          )
+        }
+      }
+    }
+
     await prisma.$transaction([
       prisma.user.update({
         where: { id: session.user.id },

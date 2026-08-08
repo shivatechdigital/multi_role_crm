@@ -236,6 +236,21 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
     }
   }
 
+  const handleCopyInviteLink = async (token: string) => {
+    try {
+      if (typeof window === 'undefined' || !navigator.clipboard) {
+        toast.error('Clipboard is not available in this browser')
+        return
+      }
+
+      const inviteUrl = `${window.location.origin}/invite?token=${token}`
+      await navigator.clipboard.writeText(inviteUrl)
+      toast.success('Invite link copied to clipboard')
+    } catch {
+      toast.error('Failed to copy invite link')
+    }
+  }
+
   if (!canViewTeam) {
     return null
   }
@@ -399,6 +414,15 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
                         <Badge variant={isPending ? 'secondary' : 'outline'}>
                           {invite.status}
                         </Badge>
+                        {isPending && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleCopyInviteLink(invite.token)}
+                          >
+                            Copy Link
+                          </Button>
+                        )}
                         {isPending && (
                           <Button
                             variant="outline"
