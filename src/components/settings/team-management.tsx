@@ -56,6 +56,8 @@ type TeamInvite = {
   createdAt: string
 }
 
+type InviteFilter = 'pending' | 'accepted' | 'revoked'
+
 interface TeamManagementProps {
   currentRole: string
   currentUserId: string
@@ -70,10 +72,25 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
   const [inviteEmail, setInviteEmail] = useState('')
   const [inviteRole, setInviteRole] = useState<AppRole>('USER')
   const [isCreatingInvite, setIsCreatingInvite] = useState(false)
+  const [activeInviteFilter, setActiveInviteFilter] = useState<InviteFilter>('pending')
 
   const canViewTeam = canManageTeam(currentRole)
   const canEditRoles = canManageRoles(currentRole)
   const canInviteUsers = canManageInvites(currentRole)
+
+  const normalizeInviteStatus = (status: string) => status.trim().toLowerCase()
+  const pendingCount = invites.filter(
+    (invite) => normalizeInviteStatus(invite.status) === 'pending'
+  ).length
+  const acceptedCount = invites.filter(
+    (invite) => normalizeInviteStatus(invite.status) === 'accepted'
+  ).length
+  const revokedCount = invites.filter(
+    (invite) => normalizeInviteStatus(invite.status) === 'revoked'
+  ).length
+  const filteredInvites = invites.filter(
+    (invite) => normalizeInviteStatus(invite.status) === activeInviteFilter
+  )
 
   useEffect(() => {
     if (!canViewTeam) {
@@ -401,8 +418,36 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
               {isInvitesLoading ? (
                 <p className="text-sm text-muted-foreground">Loading invites...</p>
               ) : invites.length ? (
-                invites.map((invite) => {
-                  const isPending = invite.status === 'pending'
+                <>
+                  <div className="flex flex-wrap gap-2 pb-1">
+                    <Button
+                      type="button"
+                      variant={activeInviteFilter === 'pending' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setActiveInviteFilter('pending')}
+                    >
+                      Pending ({pendingCount})
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={activeInviteFilter === 'accepted' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setActiveInviteFilter('accepted')}
+                    >
+                      Accepted ({acceptedCount})
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={activeInviteFilter === 'revoked' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setActiveInviteFilter('revoked')}
+                    >
+                      Revoked ({revokedCount})
+                    </Button>
+                  </div>
+
+                  {filteredInvites.length ? filteredInvites.map((invite) => {
+                  const isPending = normalizeInviteStatus(invite.status) === 'pending'
                   return (
                     <div
                       key={invite.id}
@@ -418,7 +463,7 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
 
                       <div className="flex items-center gap-2">
                         <Badge variant={isPending ? 'secondary' : 'outline'}>
-                          {invite.status}
+                          {normalizeInviteStatus(invite.status)}
                         </Badge>
                         {isPending && (
                           <Button
@@ -441,7 +486,12 @@ export function TeamManagement({ currentRole, currentUserId }: TeamManagementPro
                       </div>
                     </div>
                   )
-                })
+                }) : (
+                    <p className="text-sm text-muted-foreground">
+                      No {activeInviteFilter} invites found.
+                    </p>
+                  )}
+                </>
               ) : (
                 <p className="text-sm text-muted-foreground">No invites sent yet.</p>
               )}
